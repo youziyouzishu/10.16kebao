@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8">
+        <title>新增页面</title>
+        <link rel="stylesheet" href="/app/admin/component/pear/css/pear.css" />
+        <link rel="stylesheet" href="/app/admin/component/jsoneditor/css/jsoneditor.css" />
+        <link rel="stylesheet" href="/app/admin/admin/css/reset.css" />
+        <link rel="stylesheet" href="/app/admin/admin/css/muti-upload.css" />
+    </head>
+    <body>
+
+        <form class="layui-form" action="">
+
+            <div class="mainBox">
+                <div class="main-container mr-5">
+                    
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label required">所属用户</label>-->
+<!--                        <div class="layui-input-block">-->
+<!--                            <div name="user_id" id="user_id" required value="" ></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    -->
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label required">所属商家</label>-->
+<!--                        <div class="layui-input-block">-->
+<!--                            <div name="shop_id" id="shop_id" required value="" ></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">所属分类</label>
+                        <div class="layui-input-block">
+                            <div name="class_id" id="class_id" value="0" ></div>
+                        </div>
+                    </div>
+                    
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label required">所属后台</label>-->
+<!--                        <div class="layui-input-block">-->
+<!--                            <div name="admin_id" id="admin_id" required value="" ></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">封面</label>
+                        <div class="layui-input-block">
+                            <img class="img-3" src=""/>
+                            <input type="text" style="display:none" name="image" value="" />
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="image">
+                                <i class="layui-icon layui-icon-upload"></i>上传图片
+                            </button>
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-image">
+                                <i class="layui-icon layui-icon-align-left"></i>选择图片
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">视频</label>
+                        <div class="layui-input-block">
+                            <span></span>
+                            <input type="text" style="display:none" name="video" value="" />
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="video">
+                                <i class="layui-icon layui-icon-upload"></i>上传文件
+                            </button>
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-video">
+                                <i class="layui-icon layui-icon-align-left"></i>选择文件
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">图片</label>
+                        <div class="layui-input-block">
+                            <div class="layui-upload">
+                                <input type="text" style="display:none" name="images" value="" id="images"/>
+                                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                                    预览图：
+                                    <div class="layui-upload-list uploader-list" style="overflow: auto;" id="uploader-list">
+                                    </div>
+                                </blockquote>
+
+                                <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="multi-upload">
+                                    <i class="layui-icon layui-icon-upload"></i>多图上传
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" value="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">原价</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="original_price" value="0.00" class="layui-input">
+                        </div>
+                    </div>
+                    
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商品详情</label>
+                        <div class="layui-input-block">
+                            <textarea id="detail" name="detail" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">状态</label>
+                        <div class="layui-input-block">
+                            <div name="status" id="status" value="1" ></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">商品类型</label>
+                        <div class="layui-input-block">
+                            <div name="type" id="type" value="0" ></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item coupon_zone">
+                        <label class="layui-form-label required">券区</label>
+                        <div class="layui-input-block">
+                            <div name="coupon_zone" id="coupon_zone" value="0" ></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item piece_type">
+                        <label class="layui-form-label required">拼夺类型</label>
+                        <div class="layui-input-block">
+                            <div name="piece_type" id="piece_type" value="0" ></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item total">
+                        <label class="layui-form-label required">拼夺总数量</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" type="number" min="1" step="1" name="total" id="total" value="0" >
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item get_coupon_score">
+                        <label class="layui-form-label required">得到消费券额度</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" type="number" name="get_coupon_score" id="get_coupon_score" value="0" >
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            <div class="bottom">
+                <div class="button-container">
+                    <button type="submit" class="pear-btn pear-btn-primary pear-btn-md" lay-submit=""
+                        lay-filter="save">
+                        提交
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        重置
+                    </button>
+                </div>
+            </div>
+            
+        </form>
+
+        <script src="/app/admin/component/layui/layui.js?v=2.8.12"></script>
+        <script src="/app/admin/component/pear/pear.js"></script>
+        <script src="/app/admin/component/jsoneditor/jsoneditor.js"></script>
+        <script src="/app/admin/admin/js/permission.js"></script>
+        
+        <script>
+
+            // 相关接口
+            const INSERT_API = "/admin/shop-goods/insert";
+
+            // 字段 所属用户 user_id
+            layui.use(["jquery", "xmSelect", "popup"], function() {
+                layui.$.ajax({
+                    url: "/app/admin/user/select?format=select",
+                    dataType: "json",
+                    success: function (res) {
+                        let value = layui.$("#user_id").attr("value");
+                        let initValue = value ? value.split(",") : [];
+                        layui.xmSelect.render({
+                            el: "#user_id",
+                            name: "user_id",
+                            initValue: initValue,
+                            filterable: true,
+                            data: res.data,
+                            model: {"icon":"hidden","label":{"type":"text"}},
+                            clickClose: true,
+                            radio: true,
+                            layVerify: "required",
+                        });
+                        if (res.code) {
+                            layui.popup.failure(res.msg);
+                        }
+                    }
+                });
+            });
+
+            // 字段 状态 0=下架 1=上架
+            layui.use(["jquery", "xmSelect"], function() {
+                let value = layui.$("#status").attr("value");
+                let initValue = value ? value.split(",") : [];
+                layui.xmSelect.render({
+                    el: "#status",
+                    name: "status",
+                    filterable: true,
+                    initValue: initValue,
+                    data: [{"value":"0","name":"下架"},{"value":"1","name":"上架"}],
+                    value: "1",
+                    model: {"icon":"hidden","label":{"type":"text"}},
+                    clickClose: true,
+                    radio: true,
+                })
+            });
+
+
+            // 字段 商品类型:0=普通商品,1=拼夺商品
+            layui.use(["jquery", "xmSelect"], function() {
+                let value = layui.$("#type").attr("value");
+                let initValue = value ? value.split(",") : [];
+                let data = [{"value":"0","name":"普通商品"},{"value":"1","name":"拼夺商品"}];
+                let type = layui.xmSelect.render({
+                    el: "#type",
+                    name: "type",
+                    filterable: true,
+                    initValue: initValue,
+                    data: data,
+                    value: "0",
+                    model: {"icon":"hidden","label":{"type":"text"}},
+                    clickClose: true,
+                    radio: true,
+                    layVerify: "required",
+                    on: function (data) {
+                        //arr:  当前多选已选中的数据
+                        var arr = data.arr;
+                        if (arr.length > 0) {
+                            // 从选中数据中提取value值
+                            var value = arr[0].value;
+                            if (value === "1"){
+                                $(".coupon_zone").removeClass("layui-hide")
+                                $(".total").removeClass("layui-hide")
+                                $(".get_coupon_score").removeClass("layui-hide")
+                                $(".piece_type").removeClass("layui-hide")
+                            }else{
+                                $(".coupon_zone").addClass("layui-hide")
+                                $(".total").addClass("layui-hide")
+                                $(".get_coupon_score").addClass("layui-hide")
+                                $(".piece_type").addClass("layui-hide")
+                            }
+
+                        }
+                    },
+                })
+                type.setValue(data,false,true);
+            });
+
+
+            // 字段 券区:0=无,1=一券区,2=十券区,3=百券区,4=千券区
+            layui.use(["jquery", "xmSelect"], function() {
+                let value = layui.$("#coupon_zone").attr("value");
+                let initValue = value ? value.split(",") : [];
+                layui.xmSelect.render({
+                    el: "#coupon_zone",
+                    name: "coupon_zone",
+                    filterable: true,
+                    initValue: initValue,
+                    data: [{"value":"0","name":"无"},{"value":"1","name":"一券区"},{"value":"2","name":"十券区"},{"value":"3","name":"百券区"},{"value":"4","name":"千券区"}],
+                    value: "0",
+                    model: {"icon":"hidden","label":{"type":"text"}},
+                    clickClose: true,
+                    radio: true,
+                    layVerify: "required",
+                })
+            });
+
+            // 字段 拼夺类型0=无,1=实体商品,2=消费券
+            layui.use(["jquery", "xmSelect"], function() {
+                let value = layui.$("#piece_type").attr("value");
+                let initValue = value ? value.split(",") : [];
+                layui.xmSelect.render({
+                    el: "#piece_type",
+                    name: "piece_type",
+                    filterable: true,
+                    initValue: initValue,
+                    data: [{"value":"0","name":"无"},{"value":"1","name":"实体商品"},{"value":"2","name":"消费券"}],
+                    value: "0",
+                    model: {"icon":"hidden","label":{"type":"text"}},
+                    clickClose: true,
+                    radio: true,
+                    layVerify: "required",
+                })
+            });
+
+            
+            // 字段 所属商家 shop_id
+            layui.use(["jquery", "xmSelect", "popup"], function() {
+                layui.$.ajax({
+                    url: "/admin/shop/select?format=select",
+                    dataType: "json",
+                    success: function (res) {
+                        let value = layui.$("#shop_id").attr("value");
+                        let initValue = value ? value.split(",") : [];
+                        layui.xmSelect.render({
+                            el: "#shop_id",
+                            name: "shop_id",
+                            initValue: initValue,
+                            filterable: true,
+                            data: res.data, 
+                            model: {"icon":"hidden","label":{"type":"text"}},
+                            clickClose: true,
+                            radio: true,
+                            layVerify: "required",
+                        });
+                        if (res.code) {
+                            layui.popup.failure(res.msg);
+                        }
+                    }
+                });
+            });
+            
+            // 字段 所属分类 class_id
+            layui.use(["jquery", "xmSelect", "popup"], function() {
+                layui.$.ajax({
+                    url: "/admin/goods-class/select?format=select",
+                    dataType: "json",
+                    success: function (res) {
+                        let value = layui.$("#class_id").attr("value");
+                        let initValue = value ? value.split(",") : [];
+                        layui.xmSelect.render({
+                            el: "#class_id",
+                            name: "class_id",
+                            initValue: initValue,
+                            filterable: true,
+                            data: res.data, 
+                            value: "0",
+                            model: {"icon":"hidden","label":{"type":"text"}},
+                            clickClose: true,
+                            radio: true,
+                            layVerify: "required",
+                        });
+                        if (res.code) {
+                            layui.popup.failure(res.msg);
+                        }
+                    }
+                });
+            });
+            
+            // 字段 所属后台 admin_id
+            layui.use(["jquery", "xmSelect", "popup"], function() {
+                layui.$.ajax({
+                    url: "/app/admin/admin/select?format=select",
+                    dataType: "json",
+                    success: function (res) {
+                        let value = layui.$("#admin_id").attr("value");
+                        let initValue = value ? value.split(",") : [];
+                        layui.xmSelect.render({
+                            el: "#admin_id",
+                            name: "admin_id",
+                            initValue: initValue,
+                            filterable: true,
+                            data: res.data, 
+                            model: {"icon":"hidden","label":{"type":"text"}},
+                            clickClose: true,
+                            radio: true,
+                            layVerify: "required",
+                        });
+                        if (res.code) {
+                            layui.popup.failure(res.msg);
+                        }
+                    }
+                });
+            });
+            
+            // 字段 封面 image
+            layui.use(["upload", "layer"], function() {
+                let input = layui.$("#image").prev();
+                input.prev().attr("src", input.val());
+                layui.$("#attachment-choose-image").on("click", function() {
+                    parent.layer.open({
+                        type: 2,
+                        title: "选择附件",
+                        content: "/app/admin/upload/attachment?ext=jpg,jpeg,png,gif,bmp",
+                        area: ["95%", "90%"],
+                        success: function (layero, index) {
+                            parent.layui.$("#layui-layer" + index).data("callback", function (data) {
+                                input.val(data.url).prev().attr("src", data.url);
+                            });
+                        }
+                    });
+                });
+                layui.upload.render({
+                    elem: "#image",
+                    value: "",
+                    acceptMime: "image/gif,image/jpeg,image/jpg,image/png",
+                    url: "/app/admin/upload/image",
+                    field: "__file__",
+                    done: function (res) {
+                        if (res.code > 0) return layui.layer.msg(res.msg);
+                        this.item.prev().val(res.data.url).prev().attr("src", res.data.url);
+                    }
+                });
+            });
+            
+            // 字段 视频 video
+            layui.use(["upload", "layer", "popup", "util"], function() {
+                let input = layui.$("#video").prev();
+                input.prev().html(layui.util.escape(input.val()));
+                layui.$("#attachment-choose-video").on("click", function() {
+                    parent.layer.open({
+                        type: 2,
+                        title: "选择附件",
+                        content: "/app/admin/upload/attachment",
+                        area: ["95%", "90%"],
+                        success: function (layero, index) {
+                            parent.layui.$("#layui-layer" + index).data("callback", function (data) {
+                                input.val(data.url).prev().html(layui.util.escape(data.url));
+                            });
+                        }
+                    });
+                });
+                layui.upload.render({
+                    elem: "#video",
+                    value: "",
+                    accept: "file",
+                    url: "/app/admin/upload/file",
+                    field: "__file__",
+                    done: function (res) {
+                        if (res.code) return layui.popup.failure(res.msg);
+                        this.item.prev().val(res.data.url).prev().html(layui.util.escape(res.data.url));
+                    }
+                });
+            });
+            
+            // 字段 商品详情 detail
+            layui.use(["tinymce"], function() {
+                var tinymce = layui.tinymce
+                var edit = tinymce.render({
+                    elem: "#detail",
+                    convert_urls: false,
+                    images_upload_handler: function (blobInfo, success, failure) {
+                        // 创建一个表单数据对象
+                        const formData = new FormData();
+                        formData.append('file', blobInfo.blob(), blobInfo.filename());
+                        // 使用AJAX上传图片
+                        fetch('/app/admin/upload/image', { // 替换为你的上传API地址
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => response.json()) // 假设服务器返回的是JSON
+                            .then(data => {
+                                // 假设返回的JSON中包含了图片的URL，这里需要根据实际返回数据结构修改
+                                let url = "https://0831manghe.62.hzgqapp.com" + data.data.url;
+                                success(url); // 回调success函数，将新的URL传递给TinyMCE
+                            })
+                            .catch(error => {
+                                failure('Upload failed: ' + error.message);
+                            });
+                    },
+                });
+                edit.on("blur", function(){
+                    layui.$("#detail").val(edit.getContent());
+                });
+            });
+            
+            //提交事件
+            layui.use(["form", "popup"], function () {
+                // 字段验证允许为空
+                layui.form.verify({
+                    phone: [/(^$)|^1\d{10}$/, "请输入正确的手机号"],
+                    email: [/(^$)|^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, "邮箱格式不正确"],
+                    url: [/(^$)|(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/, "链接格式不正确"],
+                    number: [/(^$)|^\d+$/,'只能填写数字'],
+                    date: [/(^$)|^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/, "日期格式不正确"],
+                    identity: [/(^$)|(^\d{15}$)|(^\d{17}(x|X|\d)$)/, "请输入正确的身份证号"]
+                });
+                layui.form.on("submit(save)", function (data) {
+                    layui.$.ajax({
+                        url: INSERT_API,
+                        type: "POST",
+                        dateType: "json",
+                        data: data.field,
+                        success: function (res) {
+                            if (res.code) {
+                                return layui.popup.failure(res.msg);
+                            }
+                            return layui.popup.success("操作成功", function () {
+                                parent.refreshTable();
+                                parent.layer.close(parent.layer.getFrameIndex(window.name));
+                            });
+                        }
+                    });
+                    return false;
+                });
+            });
+
+            //多图上传 start
+            var multiple_images = []; //多图上传array,update也需要将这行放js最前面
+
+            var upload = layui.upload;
+            var $ = layui.$;
+            upload.render({
+                elem: '#multi-upload',
+                url: "/app/admin/upload/image",
+                multiple: true,
+                before: function(obj){
+                    layer.msg('图片上传中...', {
+                        icon: 16,
+                        shade: 0.01,
+                        time: 0
+                    })
+                },
+                done: function(res){
+                    layer.close(layer.msg());//关闭上传提示窗口
+                    //上传完毕
+                    $('#uploader-list').append(
+                        '<div class="file-iteme">' +
+                        '<div class="handle"><i class="layui-icon layui-icon-delete"></i></div>' +
+                        '<img src='+ res.data.url +' alt="'+ res.data.name +'" >' +
+                        '</div>'
+                    );
+
+                    //追加图片成功追加文件名至图片容器
+                    multiple_images.push(res.data.url);
+                    $('#images').val(multiple_images);
+                }
+            });
+
+            //鼠标悬浮事件
+            $(document).on("mouseenter mouseleave", ".file-iteme", function(event){
+                if(event.type === "mouseenter"){
+                    //鼠标悬浮
+                    $(this).children(".info").fadeIn("fast");
+                    $(this).children(".handle").fadeIn("fast");
+                }else if(event.type === "mouseleave") {
+                    //鼠标离开
+                    $(this).children(".info").hide();
+                    $(this).children(".handle").hide();
+                }
+            });
+
+            // 删除图片
+            $(document).on("click", ".file-iteme .handle", function(event){
+                var delImg = $(this).parent().children("img").attr("src")
+                var index = multiple_images.indexOf(delImg);
+                if (index !== -1) {
+                    multiple_images.splice(index, 1);
+                }
+                //重新赋值
+                $('#images').val(multiple_images);
+                //删除标签
+                $(this).parent().remove();
+            });
+            //多图上传 end
+
+        </script>
+
+    </body>
+</html>
