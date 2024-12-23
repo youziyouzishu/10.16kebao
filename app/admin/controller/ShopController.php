@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use plugin\admin\app\common\Util;
 use plugin\admin\app\model\Admin;
 use plugin\admin\app\model\AdminRole;
 use support\Request;
@@ -90,7 +91,7 @@ class ShopController extends Crud
                 $admin = new Admin;
                 $admin->username = $row->user->username;
                 $admin->nickname = $row->user->nickname;
-                $admin->password = $row->user->password;
+                $admin->password = Util::passwordHash('123456');
                 $admin->avatar = $row->user->avatar;
                 $admin->mobile = $row->user->mobile;
                 $admin->save();

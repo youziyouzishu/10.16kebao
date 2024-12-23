@@ -14,20 +14,7 @@
 
             <div class="mainBox">
                 <div class="main-container mr-5">
-                    
-<!--                    <div class="layui-form-item">-->
-<!--                        <label class="layui-form-label required">所属用户</label>-->
-<!--                        <div class="layui-input-block">-->
-<!--                            <div name="user_id" id="user_id" required value="" ></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    -->
-<!--                    <div class="layui-form-item">-->
-<!--                        <label class="layui-form-label required">所属商家</label>-->
-<!--                        <div class="layui-input-block">-->
-<!--                            <div name="shop_id" id="shop_id" required value="" ></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+
                     
                     <div class="layui-form-item">
                         <label class="layui-form-label required">所属分类</label>
@@ -35,13 +22,7 @@
                             <div name="class_id" id="class_id" value="0" ></div>
                         </div>
                     </div>
-                    
-<!--                    <div class="layui-form-item">-->
-<!--                        <label class="layui-form-label required">所属后台</label>-->
-<!--                        <div class="layui-input-block">-->
-<!--                            <div name="admin_id" id="admin_id" required value="" ></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+
 
                     
                     <div class="layui-form-item">
@@ -182,31 +163,6 @@
             // 相关接口
             const INSERT_API = "/admin/shop-goods/insert";
 
-            // 字段 所属用户 user_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/user/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#user_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#user_id",
-                            name: "user_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data,
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                            layVerify: "required",
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
 
             // 字段 状态 0=下架 1=上架
             layui.use(["jquery", "xmSelect"], function() {
@@ -230,7 +186,19 @@
             layui.use(["jquery", "xmSelect"], function() {
                 let value = layui.$("#type").attr("value");
                 let initValue = value ? value.split(",") : [];
-                let data = [{"value":"0","name":"普通商品"},{"value":"1","name":"拼夺商品"}];
+
+                {if $shop}
+                {if $shop->user->type == 0}
+                let data = [{"value":"0","name":"普通商品"}];
+                {else /}
+                    let data = [{"value":"0","name":"普通商品"},{"value":"1","name":"拼夺商品"}];
+                    {/if}
+
+                {else /}
+                    let data = [{"value":"0","name":"普通商品"},{"value":"1","name":"拼夺商品"}];
+                    {/if}
+
+
                 let type = layui.xmSelect.render({
                     el: "#type",
                     name: "type",

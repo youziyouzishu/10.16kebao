@@ -14,13 +14,7 @@
 
             <div class="mainBox">
                 <div class="main-container mr-5">
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label required">用户</label>
-                        <div class="layui-input-block">
-                            <div name="user_id" id="user_id" required value="" ></div>
-                        </div>
-                    </div>
+
                     
                     <div class="layui-form-item">
                         <label class="layui-form-label">真实姓名</label>
@@ -157,32 +151,7 @@
                                 obj[0].value = value;
                             }
                         });
-                        
-                        // 字段 用户 user_id
-                        layui.use(["jquery", "xmSelect", "popup"], function() {
-                            layui.$.ajax({
-                                url: "/app/admin/user/select?format=select",
-                                dataType: "json",
-                                success: function (res) {
-                                    let value = layui.$("#user_id").attr("value");
-                                    let initValue = value ? value.split(",") : [];
-                                    layui.xmSelect.render({
-                                        el: "#user_id",
-                                        name: "user_id",
-                                        initValue: initValue,
-                                        filterable: true,
-                                        data: res.data, 
-                                        model: {"icon":"hidden","label":{"type":"text"}},
-                                        clickClose: true,
-                                        radio: true,
-                                        layVerify: "required",
-                                    });
-                                    if (res.code) {
-                                        layui.popup.failure(res.msg);
-                                    }
-                                }
-                            });
-                        });
+
                         
                         // 字段 有效期 expire_day
                         layui.use(["laydate"], function() {

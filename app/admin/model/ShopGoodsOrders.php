@@ -104,8 +104,8 @@ class ShopGoodsOrders extends Base
         'mark',
         'tag',
         'combine_ordersn',
-        'get_shop_money',
-        'get_platform_money',
+        'shop_get_money',
+        'platform_get_money',
         'after_before_status',
     ];
 

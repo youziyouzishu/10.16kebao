@@ -13,14 +13,7 @@
         <div class="layui-card">
             <div class="layui-card-body">
                 <form class="layui-form top-search-from">
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">用户</label>
-                        <div class="layui-input-block">
-                            <div name="user_id" id="user_id" value="" ></div>
-                        </div>
-                    </div>
-                    
+
                     <div class="layui-form-item">
                         <label class="layui-form-label">有效期</label>
                         <div class="layui-input-block">
@@ -93,31 +86,7 @@
             const DELETE_API = "/admin/users-identity/delete";
             const INSERT_URL = "/admin/users-identity/insert";
             const UPDATE_URL = "/admin/users-identity/update";
-            
-            // 字段 用户 user_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/user/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#user_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#user_id",
-                            name: "user_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
+
             
             // 字段 有效期 expire_day
             layui.use(["laydate"], function() {
@@ -245,9 +214,7 @@
 				
 				// 获取表格中下拉或树形组件数据
 				let apis = [];
-				apis.push(["user_id", "/app/admin/user/select?format=select"]);
 				let apiResults = {};
-				apiResults["user_id"] = [];
 				apiResults["status"] = ["待审核","通过","驳回"];
 				let count = apis.length;
 				layui.each(apis, function (k, item) {

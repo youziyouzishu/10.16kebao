@@ -20,32 +20,12 @@
                             <input type="number" name="id" value="" class="layui-input">
                         </div>
                     </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">所属用户</label>
-                        <div class="layui-input-block">
-                            <div name="user_id" id="user_id" value="" ></div>
-                        </div>
-                    </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">所属商家</label>
-                        <div class="layui-input-block">
-                            <div name="shop_id" id="shop_id" value="" ></div>
-                        </div>
-                    </div>
-                    
+
+
                     <div class="layui-form-item">
                         <label class="layui-form-label">所属分类</label>
                         <div class="layui-input-block">
                             <div name="class_id" id="class_id" value="" ></div>
-                        </div>
-                    </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">所属后台</label>
-                        <div class="layui-input-block">
-                            <div name="admin_id" id="admin_id" value="" ></div>
                         </div>
                     </div>
 
@@ -118,58 +98,7 @@
             const UPDATE_URL = "/admin/shop-goods/update";
             const SKU_URL    = "/admin/shop-goods-sku/index";
             
-            // 字段 所属用户 user_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/user/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#user_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#user_id",
-                            name: "user_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
-            
-            // 字段 所属商家 shop_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/admin/shop/select?format=select",
-                    data: {
-                        "status": ["<>",1]
-                    },
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#shop_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#shop_id",
-                            name: "shop_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
+
             
             // 字段 所属分类 class_id
             layui.use(["jquery", "xmSelect", "popup"], function() {
@@ -195,32 +124,7 @@
                     }
                 });
             });
-            
-            // 字段 所属后台 admin_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/admin/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#admin_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#admin_id",
-                            name: "admin_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
-            
+
 
             
             // 字段 创建时间 created_at
@@ -385,15 +289,7 @@
 				
 				// 获取表格中下拉或树形组件数据
 				let apis = [];
-				apis.push(["user_id", "/app/admin/user/select?format=select"]);
-				apis.push(["shop_id", "/admin/shop/select?format=select"]);
-				apis.push(["class_id", "/admin/goods-class/select?format=select"]);
-				apis.push(["admin_id", "/app/admin/admin/select?format=select"]);
 				let apiResults = {};
-				apiResults["user_id"] = [];
-				apiResults["shop_id"] = [];
-				apiResults["class_id"] = [];
-				apiResults["admin_id"] = [];
                 apiResults["status"] = ["下架","上架"];
 				let count = apis.length;
 				layui.each(apis, function (k, item) {

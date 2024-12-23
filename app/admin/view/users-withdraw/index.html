@@ -20,13 +20,7 @@
                             <input type="number" name="id" value="" class="layui-input">
                         </div>
                     </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">用户</label>
-                        <div class="layui-input-block">
-                            <div name="user_id" id="user_id" value="" ></div>
-                        </div>
-                    </div>
+
                     
                     <div class="layui-form-item">
                         <label class="layui-form-label">状态</label>
@@ -78,6 +72,10 @@
             <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove" permission="admin.userswithdraw.delete">
                 <i class="layui-icon layui-icon-delete"></i>删除
             </button>
+
+            <button class="pear-btn pear-btn-primary pear-btn-md">
+                商家余额：{$money}
+            </button>
         </script>
 
         <!-- 表格行工具栏 -->
@@ -100,32 +98,7 @@
             const DELETE_API = "/admin/users-withdraw/delete";
             const INSERT_URL = "/admin/users-withdraw/insert";
             const UPDATE_URL = "/admin/users-withdraw/update";
-            
-            // 字段 用户 user_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/user/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#user_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#user_id",
-                            name: "user_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
-            
+
             // 字段 状态:0=待审核,1=已打款,2=驳回 status
             layui.use(["jquery", "xmSelect"], function() {
                 let value = layui.$("#status").attr("value");
@@ -245,9 +218,7 @@
 				
 				// 获取表格中下拉或树形组件数据
 				let apis = [];
-				apis.push(["user_id", "/app/admin/user/select?format=select"]);
 				let apiResults = {};
-				apiResults["user_id"] = [];
 				apiResults["status"] = ["待审核","已打款","驳回"];
 				let count = apis.length;
 				layui.each(apis, function (k, item) {

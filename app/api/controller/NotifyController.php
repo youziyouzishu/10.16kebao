@@ -84,7 +84,7 @@ class NotifyController extends Base
                         'logistics_type' => 3,
                         'delivery_mode' => 1,
                         'shipping_list' => [[
-                            'item_desc' => '盲盒'
+                            'item_desc' => '发货'
                         ]],
                         'upload_time' => $formatted_date,
                         'payer' => ['openid' => $openid]
@@ -110,6 +110,7 @@ class NotifyController extends Base
                     if (!$order) {
                         throw new \Exception('订单不存在');
                     }
+
                     $order->status = 1;
                     $order->pay_type = $paytype == 'wechat'?1:($paytype=='balance'?3:2);
                     $order->pay_time = date('Y-m-d H:i:s');
@@ -128,6 +129,8 @@ class NotifyController extends Base
             }
             Db::connection('plugin.admin.mysql')->commit();
         } catch (\Throwable $e) {
+            dump($e->getMessage());
+            dump($e->getLine());
             Db::connection('plugin.admin.mysql')->rollBack();
             throw new \Exception($e->getMessage());
         }

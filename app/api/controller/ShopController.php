@@ -148,9 +148,11 @@ class ShopController extends Base
         $class_id = $request->post('class_id');
         $lat = $request->post('lat');
         $lng = $request->post('lng');
+        $keyword = $request->post('keyword');
         $order = $request->post('order'); # 排序类型 1=综合排序  2=离我最近  3点评高分
         $rows = Shop::where(['status' => 3])
             ->orderByDistance($lat, $lng)
+            ->where('name', 'like', "%$keyword%")
             ->when(!empty($class_id), function ($query) use ($class_id) {
                 $query->where(['class_id' => $class_id]);
             })

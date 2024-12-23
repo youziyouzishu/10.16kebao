@@ -20,13 +20,7 @@
                             <input type="number" name="id" value="" class="layui-input">
                         </div>
                     </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">会员ID</label>
-                        <div class="layui-input-block">
-                            <div name="user_id" id="user_id" value="" ></div>
-                        </div>
-                    </div>
+
                     
                     <div class="layui-form-item">
                         <label class="layui-form-label">类型</label>
@@ -100,31 +94,7 @@
             const DELETE_API = "/admin/users-score-log/delete";
             const INSERT_URL = "/admin/users-score-log/insert";
             const UPDATE_URL = "/admin/users-score-log/update";
-            
-            // 字段 会员ID user_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/user/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#user_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#user_id",
-                            name: "user_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
+
             
             // 字段 类型 type
             layui.use(["jquery", "xmSelect"], function() {
@@ -135,7 +105,7 @@
                     name: "type",
                     filterable: true,
                     initValue: initValue,
-                    data: [{"value":"confirm_trade_score","name":"确权交易积分"},{"value":"await_confirm_score","name":"待确权积分"},{"value":"confirm_score","name":"确权积分"},{"value":"develop_score","name":"拓展积分"},{"value":"green_score","name":"绿色积分"},{"value":"contribution_score","name":"贡献值"},{"value":"shop_score","name":"门店积分"},{"value":"coupon_score","name":"优惠券额度"}],
+                    data: [{"value":"confirm_trade_score","name":"确权交易积分"},{"value":"await_confirm_score","name":"待确权积分"},{"value":"confirm_score","name":"确权积分"},{"value":"develop_score","name":"拓展积分"},{"value":"green_score","name":"绿色积分"},{"value":"contribution_score","name":"贡献值"},{"value":"shop_score","name":"门店积分"},{"value":"coupon_score","name":"优惠券额度"},{"value":"offset","name":"抵用券"},{"value":"money","name":"商家余额"}],
                     model: {"icon":"hidden","label":{"type":"text"}},
                     clickClose: true,
                     radio: true,
@@ -239,10 +209,8 @@
 				
 				// 获取表格中下拉或树形组件数据
 				let apis = [];
-				apis.push(["user_id", "/app/admin/user/select?format=select"]);
 				let apiResults = {};
-				apiResults["user_id"] = [];
-				apiResults["type"] = {"confirm_trade_score":"确权交易积分","await_confirm_score":"待确权积分","confirm_score":"确权积分","develop_score":"拓展积分","green_score":"绿色积分","contribution_score":"贡献值","shop_score":"门店积分","coupon_score":"优惠券额度"};
+				apiResults["type"] = {"confirm_trade_score":"确权交易积分","await_confirm_score":"待确权积分","confirm_score":"确权积分","develop_score":"拓展积分","green_score":"绿色积分","contribution_score":"贡献值","shop_score":"门店积分","coupon_score":"优惠券额度","offset":"抵用券","money":"商家余额"};
 				let count = apis.length;
 				layui.each(apis, function (k, item) {
 				    let [field, url] = item;

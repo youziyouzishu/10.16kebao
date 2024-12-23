@@ -14,42 +14,7 @@
 
             <div class="mainBox">
                 <div class="main-container mr-5">
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label required">订单</label>
-                        <div class="layui-input-block">
-                            <div name="order_id" id="order_id" required value="" ></div>
-                        </div>
-                    </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label required">用户</label>
-                        <div class="layui-input-block">
-                            <div name="user_id" id="user_id" required value="" ></div>
-                        </div>
-                    </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label required">商铺</label>
-                        <div class="layui-input-block">
-                            <div name="shop_id" id="shop_id" required value="" ></div>
-                        </div>
-                    </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label required">商品</label>
-                        <div class="layui-input-block">
-                            <div name="goods_id" id="goods_id" required value="" ></div>
-                        </div>
-                    </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label required">规格</label>
-                        <div class="layui-input-block">
-                            <div name="sku_id" id="sku_id" required value="" ></div>
-                        </div>
-                    </div>
-                    
+
                     <div class="layui-form-item">
                         <label class="layui-form-label">描述评分</label>
                         <div class="layui-input-block">
@@ -183,32 +148,7 @@
                                 }
                             });
                         });
-                        
-                        // 字段 用户 user_id
-                        layui.use(["jquery", "xmSelect", "popup"], function() {
-                            layui.$.ajax({
-                                url: "/app/admin/user/select?format=select",
-                                dataType: "json",
-                                success: function (res) {
-                                    let value = layui.$("#user_id").attr("value");
-                                    let initValue = value ? value.split(",") : [];
-                                    layui.xmSelect.render({
-                                        el: "#user_id",
-                                        name: "user_id",
-                                        initValue: initValue,
-                                        filterable: true,
-                                        data: res.data, 
-                                        model: {"icon":"hidden","label":{"type":"text"}},
-                                        clickClose: true,
-                                        radio: true,
-                                        layVerify: "required",
-                                    });
-                                    if (res.code) {
-                                        layui.popup.failure(res.msg);
-                                    }
-                                }
-                            });
-                        });
+
                         
                         // 字段 商铺 shop_id
                         layui.use(["jquery", "xmSelect", "popup"], function() {

@@ -149,6 +149,27 @@ class UserController extends Base
         return $this->success('获取成功', $row);
     }
 
+    function bindMobile(Request $request)
+    {
+        $code = $request->post('code');
+        //小程序
+        $app = new Application(config('wechat'));
+        $api = $app->getClient();
+        $ret = $api->postJson('/wxa/business/getuserphonenumber', [
+            'code' => $code
+        ]);
+        $ret = json_decode($ret);
+        if ($ret->errcode != 0) {
+            return $this->fail('获取手机号失败');
+        }
+        $mobile = $ret->phone_info->phoneNumber;
+        $row = User::find($request->user_id);
+        $row->mobile = $mobile;
+        $row->username = $mobile;
+        $row->save();
+        return $this->success('成功');
+    }
+
     function bindWechat(Request $request)
     {
         $code = $request->post('code');

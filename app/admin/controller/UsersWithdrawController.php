@@ -40,12 +40,13 @@ class UsersWithdrawController extends Crud
     {
 
         [$where, $format, $limit, $field, $order] = $this->selectInput($request);
-        $query = $this->doSelect($where, $field, $order);
         if (in_array(3, admin('roles'))) {
             //商家
             $shop = Shop::where('admin_id', admin_id())->first();
-            $query->where('user_id',$shop->user_id);
+            $where['user_id'] = $shop->user_id;
         }
+        $query = $this->doSelect($where, $field, $order);
+
         return $this->doFormat($query, $format, $limit);
     }
 
@@ -55,7 +56,15 @@ class UsersWithdrawController extends Crud
      */
     public function index(): Response
     {
-        return view('users-withdraw/index');
+        $admin_id = admin_id();
+        $shop = Shop::where('admin_id', $admin_id)->first();
+
+        if (!$shop) {
+            $money = User::sum('money');
+        }else{
+            $money = $shop->user->money;
+        }
+        return view('users-withdraw/index',['money'=>$money]);
     }
 
     /**

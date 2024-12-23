@@ -47,7 +47,7 @@ return [
             'mch_public_cert_path' =>  config_path().'/payment/apiclient_cert.pem',
             // 必填-微信回调url
             // 不能有参数，如?号，空格等，否则会无法正确回调
-            'notify_url' => 'https://yansongda.cn/wechat/notify',
+            'notify_url' => 'https://1016kebao.62.hzgqapp.com/api/notify/wechat',
             // 选填-公众号 的 app_id
             // 可在 mp.weixin.qq.com 设置与开发->基本配置->开发者ID(AppID) 查看
             'mp_app_id' => '',

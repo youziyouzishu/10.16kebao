@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\Shop;
 use support\Request;
 use support\Response;
 use app\admin\model\UsersScoreLog;
@@ -46,6 +47,11 @@ class UsersScoreLogController extends Crud
     public function select(Request $request): Response
     {
         [$where, $format, $limit, $field, $order] = $this->selectInput($request);
+        // 判断是否是商家
+        if (in_array(3, admin('roles'))){
+            $shop = Shop::where('admin_id',admin_id())->first();
+            $where['user_id'] = $shop->user_id;
+        }
         $query = $this->doSelect($where, $field, $order)->with(['user']);
         return $this->doFormat($query, $format, $limit);
     }

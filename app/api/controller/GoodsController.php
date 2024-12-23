@@ -10,6 +10,7 @@ use app\admin\model\ShopGoodsOrders;
 use app\admin\model\ShopGoodsSku;
 use app\admin\model\UsersCollect;
 use app\api\basic\Base;
+use EasyWeChat\MiniApp\Application;
 use Illuminate\Database\Eloquent\Builder;
 use plugin\admin\app\common\Util;
 use plugin\admin\app\model\User;
@@ -68,7 +69,17 @@ class GoodsController extends Base
         $row->load(['sku', 'shop'=>function ($query) {
             $query->with(['topGoods']);
         }]);
-        $row->iscollect = ShopGoods::isCollect($request->user_id, $goods_id);
+        $row->setAttribute('iscollect',ShopGoods::isCollect($request->user_id, $goods_id));
+        $app = new Application(config('wechat'));
+        $data = [
+            'scene' => $goods_id,
+            'page' => 'pages/good/detail',
+            'width' => 280,
+            'check_path' => !config('app.debug'),
+        ];
+        $response = $app->getClient()->postJson('/wxa/getwxacodeunlimit', $data);
+        $base64 = "data:image/png;base64,".base64_encode($response->getContent());
+        $row->setAttribute('base64',$base64);
 
         return $this->success('请求成功', $row);
     }

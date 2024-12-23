@@ -13,14 +13,7 @@
 
             <div class="mainBox">
                 <div class="main-container mr-5">
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">会员ID</label>
-                        <div class="layui-input-block">
-                            <div name="user_id" id="user_id" value="0" ></div>
-                        </div>
-                    </div>
-                    
+
                     <div class="layui-form-item">
                         <label class="layui-form-label">变更积分</label>
                         <div class="layui-input-block">
@@ -82,32 +75,7 @@
 
             // 相关接口
             const INSERT_API = "/admin/users-score-log/insert";
-            
-            // 字段 会员ID user_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/user/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#user_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#user_id",
-                            name: "user_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            value: "0",
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
+
             
             // 字段 类型 type
             layui.use(["jquery", "xmSelect"], function() {

@@ -119,9 +119,11 @@ class OrderController extends Base
             User::score($get_green_score, $order->user_id, '购买商品获得绿色积分', 'green_score');
         }
 
-        $platform_get_money = round($order->pay_amount * $order->shop->rate / 100);
+        $platform_get_money = round($order->goods_amount * $order->shop->rate / 100,2);
         $shop_get_money = $order->pay_amount - $platform_get_money;
         User::score($shop_get_money, $order->shop->user_id, '成交订单获得金额', 'money');
+        $order->platform_get_money = $platform_get_money;
+        $order->shop_get_money = $shop_get_money;
         $order->save();
         return $this->success();
     }

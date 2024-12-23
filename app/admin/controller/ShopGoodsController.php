@@ -32,11 +32,12 @@ class ShopGoodsController extends Crud
 
     public function select(Request $request): Response
     {
+
+        [$where, $format, $limit, $field, $order] = $this->selectInput($request);
         // 判断是否是商家
         if (in_array(3, admin('roles'))){
             $where['admin_id'] = admin_id();
         }
-        [$where, $format, $limit, $field, $order] = $this->selectInput($request);
         $query = $this->doSelect($where, $field, $order);
         return $this->doFormat($query, $format, $limit);
     }
@@ -58,10 +59,9 @@ class ShopGoodsController extends Crud
      */
     public function insert(Request $request): Response
     {
-
+        $shop = Shop::with(['user'])->where('admin_id',admin_id())->first();
         if ($request->method() === 'POST') {
             $param = $request->post();
-            $shop = Shop::where('admin_id',admin_id())->first();
             if (!$shop){
                 return $this->fail('非商家不能操作');
             }
@@ -93,7 +93,7 @@ class ShopGoodsController extends Crud
             return parent::insert($request);
         }
 
-        return view('shop-goods/insert');
+        return view('shop-goods/insert',['shop'=>$shop]);
     }
 
     /**
@@ -104,9 +104,10 @@ class ShopGoodsController extends Crud
     */
     public function update(Request $request): Response
     {
+        $shop = Shop::with(['user'])->where('admin_id',admin_id())->first();
+
         if ($request->method() === 'POST') {
             $param = $request->post();
-            $shop = Shop::where('admin_id',admin_id())->first();
             if (!$shop){
                 return $this->fail('非商家不能操作');
             }
@@ -132,7 +133,7 @@ class ShopGoodsController extends Crud
             ]);
             return parent::update($request);
         }
-        return view('shop-goods/update');
+        return view('shop-goods/update',['shop'=>$shop]);
     }
 
 }
