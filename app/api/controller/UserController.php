@@ -11,16 +11,9 @@ use app\admin\model\UsersTrack;
 use app\api\basic\Base;
 use Carbon\Carbon;
 use EasyWeChat\MiniApp\Application;
-use Endroid\QrCode\Color\Color;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\QrCode;
-use Endroid\QrCode\RoundBlockSizeMode;
-use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Database\Eloquent\Builder;
 use plugin\admin\app\common\Util;
 use plugin\admin\app\model\Dict;
-use plugin\admin\app\model\Option;
 use plugin\admin\app\model\User;
 use Respect\Validation\Validator;
 use support\Request;
@@ -38,6 +31,7 @@ class UserController extends Base
         $captcha = $request->post('captcha');
         $code = $request->post('code');
         $login_type = $request->post('login_type');# 1=微信登陆 2=手机号登录
+        $invitecode = $request->post('invitecode','');
         $openid = '';
         if ($login_type == 1) {
             $config = config('wechat');
@@ -62,8 +56,32 @@ class UserController extends Base
                 'mobile' => $mobile,
                 'join_time' => date('Y-m-d H:i:s'),
                 'join_ip' => $request->getRealIp(),
-                'openid' => $openid
+                'openid' => $openid,
+                'invitecode'=>Util::generateInvitecode()
             ]);
+
+            $parent = User::where('invitecode', $invitecode)->first();
+            if ($parent){
+                // 增加直推关系
+                UsersLayer::create([
+                    'user_id' => $user->id,
+                    'parent_id' => $parent->id,
+                    'layer' => 1
+                ]);
+
+                // 处理多层关系
+                $positions = UsersLayer::where('user_id', $parent->id)->get();
+                if ($positions->isNotEmpty()) {
+                    foreach ($positions as $position) {
+                        UsersLayer::create([
+                            'user_id' => $user->id,
+                            'parent_id' => $position->parent_id,
+                            'layer' => $position->layer + 1
+                        ]);
+                    }
+                }
+            }
+
         }
         $user->last_time = date('Y-m-d H:i:s');
         $user->last_ip = $request->getRealIp();
@@ -207,13 +225,6 @@ class UserController extends Base
                 $row->setAttribute($key, $value);
             }
         }
-//        $row->fill([
-//            'avatar' => $avatar,
-//            'nickname' => $nickname,
-//            'wechat' => $wechat,
-//            'birthday' => $birthday,
-//            'city' => $city
-//        ]);
         $row->save();
         return $this->success('修改成功');
     }
@@ -241,20 +252,12 @@ class UserController extends Base
     function getTeamInfo(Request $request)
     {
         $user = User::getUserById($request->user_id);
-        $user->load(['agent', 'parent' => function ($query) {
-            $query->with(['agent']);
-        }]);
-        $team = $user->children()->with(['agent'])->get();
+        $team = $user->children()->get();
         $team_count = $team->count();
-        $team_consume = $team->sum('consume');//直推销售额
-        $total_team_ids = UsersLayer::where('parent_id', $request->user_id)->pluck('user_id');
-        $total_team_consume = User::whereIn('id', $total_team_ids)->sum('consume');
         return $this->success('获取成功', [
             'user' => $user,
             'team' => $team,
             'team_count' => $team_count,
-            'team_consume' => $team_consume,
-            'total_team_consume' => $total_team_consume
         ]);
     }
 
@@ -262,24 +265,15 @@ class UserController extends Base
     function getPoster(Request $request)
     {
         $user = User::getUserById($request->user_id);
-        // 使用构建器创建 QR Code
-        $writer = new PngWriter();
-        $qrCode = new QrCode(
-            data: 'https://0907shangcheng.62.hzgqapp.com/register/register.html#/?invitecode=' . $user->invitecode,
-            encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::Low,
-            size: 100,
-            margin: 10,
-            roundBlockSizeMode: RoundBlockSizeMode::Margin,
-            foregroundColor: new Color(0, 0, 0),
-            backgroundColor: new Color(255, 255, 255)
-        );
-        $result = $writer->write($qrCode)->getDataUri();
-        $name = 'admin_config';
-        $config = Option::where('name', $name)->value('value');
-        $config = json_decode($config);
-        $poster = $config->poster;
-        return $this->success('获取成功', ['base64' => $result, 'invitecode' => $user->invitecode, 'poster_image' => $poster->poster_image]);
+        $app = new Application(config('wechat'));
+        $response = $app->getClient()->postJson('/wxa/getwxacodeunlimit', [
+            'scene' => $user->invitecode,
+            'page' => 'pages/home',
+            'width' => 280,
+            'check_path' => !config('app.debug'),
+        ]);
+        $base64 = "data:image/png;base64,".base64_encode($response->getContent());
+        return $this->success('获取成功', ['base64' => $base64, 'invitecode' => $user->invitecode]);
     }
 
     #实名认证

@@ -45,7 +45,7 @@ class Util extends Base
     public static function generateInvitecode()
     {
         do {
-            $invitecode = self::alnum();
+            $invitecode = self::alnum(4);
         } while (User::where(['invitecode' => $invitecode])->exists());
         return $invitecode;
     }

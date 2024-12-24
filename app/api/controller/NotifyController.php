@@ -117,12 +117,6 @@ class NotifyController extends Base
                     $order->goods->increment('sale_num'); //增加商品销量
                     $order->goods->shop->increment('sale_num'); //增加门店销量
                     $order->save();
-                    #自动确认收货
-                    // 队列名
-                    $queue = 'order';
-                    // 数据，可以直接传数组，无需序列化
-                    $data = ['order_id' => $order->id, 'event' => 'order_accept'];
-                    Client::send($queue, $data, 60*60*24*3);
                     break;
                 default:
                     throw new \Exception('回调错误');

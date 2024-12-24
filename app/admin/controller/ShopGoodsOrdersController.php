@@ -8,13 +8,14 @@ use support\Response;
 use app\admin\model\ShopGoodsOrders;
 use plugin\admin\app\controller\Crud;
 use support\exception\BusinessException;
+use Webman\RedisQueue\Client;
 
 /**
- * 商家订单记录 
+ * 商家订单记录
  */
 class ShopGoodsOrdersController extends Crud
 {
-    
+
     /**
      * @var ShopGoodsOrders
      */
@@ -31,10 +32,10 @@ class ShopGoodsOrdersController extends Crud
 
         [$where, $format, $limit, $field, $order] = $this->selectInput($request);
         // 判断是否是商家
-        if (in_array(3,admin('roles'))){
+        if (in_array(3, admin('roles'))) {
             $where['admin_id'] = admin_id();
         }
-        $query = $this->doSelect($where, $field, $order)->with(['user','shop','goods','sku','address']);
+        $query = $this->doSelect($where, $field, $order)->with(['user', 'shop', 'goods', 'sku', 'address']);
         return $this->doFormat($query, $format, $limit);
     }
 
@@ -46,7 +47,7 @@ class ShopGoodsOrdersController extends Crud
     {
         $this->model = new ShopGoodsOrders;
     }
-    
+
     /**
      * 浏览
      * @return Response
@@ -54,7 +55,7 @@ class ShopGoodsOrdersController extends Crud
     public function index(): Response
     {
         $shop = Shop::where('admin_id', admin_id())->first();
-        return view('shop-goods-orders/index',['shop'=>$shop]);
+        return view('shop-goods-orders/index', ['shop' => $shop]);
     }
 
     /**
@@ -76,14 +77,23 @@ class ShopGoodsOrdersController extends Crud
      * @param Request $request
      * @return Response
      * @throws BusinessException
-    */
+     */
     public function update(Request $request): Response
     {
         if ($request->method() === 'POST') {
             $param = $request->post();
             $row = $this->model->find($param['id']);
+            if ($row->status == 1 && $param['status'] == 2) {
+                #3天自动确认收货
+                // 队列名
+                $queue = 'order';
+                // 数据，可以直接传数组，无需序列化
+                $data = ['order_id' => $row->id, 'event' => 'order_accept'];
+                Client::send($queue, $data, 60 * 60 * 24 * 3);
 
-            if ($row->status == 6&&$param['status']==7 ){
+            }
+
+            if ($row->status == 6 && $param['status'] == 7) {
                 //收到货了  开始退款
                 //执行退款
             }
