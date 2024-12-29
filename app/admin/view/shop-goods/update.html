@@ -21,10 +21,10 @@
                         <div class="layui-input-block">
                             <img class="img-3" src=""/>
                             <input type="text" style="display:none" name="image" value="" />
-                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="image"  permission="app.admin.upload.image">
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="image" >
                                 <i class="layui-icon layui-icon-upload"></i>上传图片
                             </button>
-                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-image"  permission="app.admin.upload.attachment">
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-image">
                                 <i class="layui-icon layui-icon-align-left"></i>选择图片
                             </button>
                         </div>
@@ -35,10 +35,10 @@
                         <div class="layui-input-block">
                             <span></span>
                             <input type="text" style="display:none" name="video" value="" />
-                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="video" permission="app.admin.upload.file">
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="video">
                                 <i class="layui-icon layui-icon-upload"></i>上传文件
                             </button>
-                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-video" permission="app.admin.upload.attachment">
+                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-video">
                                 <i class="layui-icon layui-icon-align-left"></i>选择文件
                             </button>
                         </div>
@@ -91,7 +91,7 @@
                     </div>
 
 
-                    <div class="layui-form-item">
+                    <div class="layui-form-item layui-hide">
                         <label class="layui-form-label required">商品类型</label>
                         <div class="layui-input-block">
                             <div name="type" id="type" value="0" ></div>
@@ -289,9 +289,6 @@
                             })
                         });
 
-
-                        
-
                         
                         // 字段 封面 image
                         layui.use(["upload", "layer"], function() {
@@ -321,35 +318,7 @@
                                 }
                             });
                         });
-                        
-                        // 字段 视频 video
-                        layui.use(["upload", "layer", "popup", "util"], function() {
-                            let input = layui.$("#video").prev();
-                            input.prev().html(layui.util.escape(input.val()));
-                            layui.$("#attachment-choose-video").on("click", function() {
-                                parent.layer.open({
-                                    type: 2,
-                                    title: "选择附件",
-                                    content: "/app/admin/upload/attachment",
-                                    area: ["95%", "90%"],
-                                    success: function (layero, index) {
-                                        parent.layui.$("#layui-layer" + index).data("callback", function (data) {
-                                            input.val(data.url).prev().html(layui.util.escape(data.url));
-                                        });
-                                    }
-                                });
-                            });
-                            layui.upload.render({
-                                elem: "#video",
-                                accept: "file",
-                                url: "/app/admin/upload/file",
-                                field: "__file__",
-                                done: function (res) {
-                                    if (res.code) return layui.popup.failure(res.msg);
-                                    this.item.prev().val(res.data.url).prev().html(layui.util.escape(res.data.url));
-                                }
-                            });
-                        });
+
                         
                         // 字段 商品详情 detail
                         layui.use(["tinymce"], function() {

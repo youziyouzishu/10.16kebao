@@ -70,6 +70,12 @@ class ShopGoodsSkuController extends Crud
             if ($goods->type == 1){
                 return $this->fail('拼夺商品不允许添加规格');
             }
+            if ($param['price'] <=0){
+                return $this->fail('商品价格不能小于0');
+            }
+            if ($param['total'] <= 0){
+                return $this->fail('商品库存不能小于0');
+            }
             $request->setParams('post',[
                 'num'=>$request->post('total')
             ]);
@@ -95,6 +101,12 @@ class ShopGoodsSkuController extends Crud
             }
             if ($goods->type == 1){
                 return $this->fail('拼夺商品不允许添加规格');
+            }
+            if ($param['price'] <=0 ){
+                return $this->fail('商品价格不能小于0');
+            }
+            if ($param['total'] <= 0){
+                return $this->fail('商品库存不能小于0');
             }
             $request->setParams('post',[
                 'num'=>$request->post('total')

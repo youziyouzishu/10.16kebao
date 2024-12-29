@@ -272,31 +272,7 @@
             });
 
             
-            // 字段 所属商家 shop_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/admin/shop/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#shop_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#shop_id",
-                            name: "shop_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                            layVerify: "required",
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
+
             
             // 字段 所属分类 class_id
             layui.use(["jquery", "xmSelect", "popup"], function() {
@@ -325,32 +301,7 @@
                 });
             });
             
-            // 字段 所属后台 admin_id
-            layui.use(["jquery", "xmSelect", "popup"], function() {
-                layui.$.ajax({
-                    url: "/app/admin/admin/select?format=select",
-                    dataType: "json",
-                    success: function (res) {
-                        let value = layui.$("#admin_id").attr("value");
-                        let initValue = value ? value.split(",") : [];
-                        layui.xmSelect.render({
-                            el: "#admin_id",
-                            name: "admin_id",
-                            initValue: initValue,
-                            filterable: true,
-                            data: res.data, 
-                            model: {"icon":"hidden","label":{"type":"text"}},
-                            clickClose: true,
-                            radio: true,
-                            layVerify: "required",
-                        });
-                        if (res.code) {
-                            layui.popup.failure(res.msg);
-                        }
-                    }
-                });
-            });
-            
+
             // 字段 封面 image
             layui.use(["upload", "layer"], function() {
                 let input = layui.$("#image").prev();
@@ -381,36 +332,7 @@
                 });
             });
             
-            // 字段 视频 video
-            layui.use(["upload", "layer", "popup", "util"], function() {
-                let input = layui.$("#video").prev();
-                input.prev().html(layui.util.escape(input.val()));
-                layui.$("#attachment-choose-video").on("click", function() {
-                    parent.layer.open({
-                        type: 2,
-                        title: "选择附件",
-                        content: "/app/admin/upload/attachment",
-                        area: ["95%", "90%"],
-                        success: function (layero, index) {
-                            parent.layui.$("#layui-layer" + index).data("callback", function (data) {
-                                input.val(data.url).prev().html(layui.util.escape(data.url));
-                            });
-                        }
-                    });
-                });
-                layui.upload.render({
-                    elem: "#video",
-                    value: "",
-                    accept: "file",
-                    url: "/app/admin/upload/file",
-                    field: "__file__",
-                    done: function (res) {
-                        if (res.code) return layui.popup.failure(res.msg);
-                        this.item.prev().val(res.data.url).prev().html(layui.util.escape(res.data.url));
-                    }
-                });
-            });
-            
+
             // 字段 商品详情 detail
             layui.use(["tinymce"], function() {
                 var tinymce = layui.tinymce

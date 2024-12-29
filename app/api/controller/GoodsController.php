@@ -198,6 +198,7 @@ class GoodsController extends Base
 
     function pay(Request $request)
     {
+        dump($request->post());
         $use_coupon_score = $request->post('use_coupon_score'); #是否使用 优惠券额度 0否  1是
         $address_id = $request->post('address_id');
         $mark = $request->post('mark', '');
@@ -241,7 +242,7 @@ class GoodsController extends Base
                 if ($res->code == 1) {
                     return $this->fail($res->msg);
                 }
-                return $this->success('请求成功', ['combine_ordersn' => '']);
+                return $this->success('请求成功');
             } else {
                 // 队列名
                 $queue = 'order';

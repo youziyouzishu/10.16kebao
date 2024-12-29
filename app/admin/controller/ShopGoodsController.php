@@ -38,7 +38,7 @@ class ShopGoodsController extends Crud
         if (in_array(3, admin('roles'))){
             $where['admin_id'] = admin_id();
         }
-        $query = $this->doSelect($where, $field, $order);
+        $query = $this->doSelect($where, $field, $order)->with(['user','shop','class']);
         return $this->doFormat($query, $format, $limit);
     }
     

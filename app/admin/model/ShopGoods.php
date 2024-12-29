@@ -113,6 +113,11 @@ class ShopGoods extends Base
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    function class()
+    {
+        return $this->belongsTo(GoodsClass::class, 'class_id');
+    }
+
     public static function getGoodsById($id)
     {
         $row = self::find($id);
