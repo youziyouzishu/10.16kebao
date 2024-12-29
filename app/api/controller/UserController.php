@@ -62,6 +62,8 @@ class UserController extends Base
 
             $parent = User::where('invitecode', $invitecode)->first();
             if ($parent){
+                $user->parent_id = $parent->id;
+                $user->save();
                 // 增加直推关系
                 UsersLayer::create([
                     'user_id' => $user->id,
@@ -161,7 +163,10 @@ class UserController extends Base
     #获取个人信息
     function getUserInfo(Request $request)
     {
-        $user_id = $request->post('user_id', $request->user_id);
+        $user_id = $request->post('user_id');
+        if(empty($user_id)){
+            $user_id = $request->user_id;
+        }
         $row = User::getUserById($user_id);
         $row->load(['agent', 'parent', 'shop','consumer']);
         return $this->success('获取成功', $row);
@@ -268,9 +273,10 @@ class UserController extends Base
         $app = new Application(config('wechat'));
         $response = $app->getClient()->postJson('/wxa/getwxacodeunlimit', [
             'scene' => $user->invitecode,
-            'page' => 'pages/home',
+            'page' => 'pages/login',
             'width' => 280,
             'check_path' => !config('app.debug'),
+            'env_version'=> config('app.debug')?'trial':'release',
         ]);
         $base64 = "data:image/png;base64,".base64_encode($response->getContent());
         return $this->success('获取成功', ['base64' => $base64, 'invitecode' => $user->invitecode]);

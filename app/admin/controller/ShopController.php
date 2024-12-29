@@ -41,7 +41,7 @@ class ShopController extends Crud
     public function select(Request $request): Response
     {
         [$where, $format, $limit, $field, $order] = $this->selectInput($request);
-        $query = $this->doSelect($where, $field, $order)->whereIn('status', [2, 3, 4]);
+        $query = $this->doSelect($where, $field, $order)->whereIn('status', [2, 3, 4])->with(['user','class']);
         if (in_array(3, admin('roles'))) {
             //商家
             $query->where('admin_id', admin_id())->where('status', 3);

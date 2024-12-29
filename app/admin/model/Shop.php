@@ -156,6 +156,11 @@ class Shop extends Base
         return $this->belongsTo(User::class);
     }
 
+    function class()
+    {
+        return $this->belongsTo(ShopClass::class,'class_id');
+    }
+
     //判断是否商家
     function isShop($user_id)
     {

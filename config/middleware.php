@@ -17,7 +17,6 @@
 return [
     // api应用中间件
     'api' => [
-        \app\middleware\AccessControl::class,
         \app\middleware\ApiAuth::class,
     ],
 ];

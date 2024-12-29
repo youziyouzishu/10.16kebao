@@ -157,49 +157,19 @@
 						title: "所属用户",align: "center",
 						field: "user_id",
 						templet: function (d) {
-							let field = "user_id";
-							if (typeof d[field] == "undefined") return "";
-							let items = [];
-							layui.each((d[field] + "").split(","), function (k , v) {
-								items.push(apiResults[field][v] || v);
-							});
-							return util.escape(items.join(","));
+                            return d.user.nickname
 						}
 					},{
 						title: "所属商家",align: "center",
 						field: "shop_id",
 						templet: function (d) {
-							let field = "shop_id";
-							if (typeof d[field] == "undefined") return "";
-							let items = [];
-							layui.each((d[field] + "").split(","), function (k , v) {
-								items.push(apiResults[field][v] || v);
-							});
-							return util.escape(items.join(","));
+                            return d.shop.name
 						}
 					},{
 						title: "所属分类",align: "center",
 						field: "class_id",
 						templet: function (d) {
-							let field = "class_id";
-							if (typeof d[field] == "undefined") return "";
-							let items = [];
-							layui.each((d[field] + "").split(","), function (k , v) {
-								items.push(apiResults[field][v] || v);
-							});
-							return util.escape(items.join(","));
-						}
-					},{
-						title: "所属后台",align: "center",
-						field: "admin_id",
-						templet: function (d) {
-							let field = "admin_id";
-							if (typeof d[field] == "undefined") return "";
-							let items = [];
-							layui.each((d[field] + "").split(","), function (k , v) {
-								items.push(apiResults[field][v] || v);
-							});
-							return util.escape(items.join(","));
+							return d.class.name
 						}
 					},{
 						title: "封面",align: "center",

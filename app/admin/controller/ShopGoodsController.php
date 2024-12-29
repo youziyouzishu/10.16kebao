@@ -65,6 +65,9 @@ class ShopGoodsController extends Crud
             if (!$shop){
                 return $this->fail('非商家不能操作');
             }
+            if ($param['original_price'] <= 0){
+                return $this->fail('商品原价价格不能小于0');
+            }
             if ($param['type'] == 1){
                 if ($shop->user->type == 0){
                     return $this->fail('非官方不能操作');
@@ -110,6 +113,9 @@ class ShopGoodsController extends Crud
             $param = $request->post();
             if (!$shop){
                 return $this->fail('非商家不能操作');
+            }
+            if ($param['original_price'] <= 0){
+                return $this->fail('商品原价价格不能小于0');
             }
             if ($param['type'] == 1){
                 if ($shop->user->type == 0){
