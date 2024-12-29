@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>浏览页面</title>
+    <link rel="stylesheet" href="/app/admin/component/pear/css/pear.css"/>
+    <link rel="stylesheet" href="/app/admin/admin/css/reset.css"/>
+</head>
+<body class="pear-container">
+
+
+
+
+
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table id="ID-treeTable-demo" lay-filter="ID-treeTable-demo"></table>
+    </div>
+</div>
+
+
+
+
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<script src="/app/admin/component/layui/layui.js?v=2.8.12"></script>
+<script src="/app/admin/component/pear/pear.js"></script>
+<script src="/app/admin/admin/js/permission.js"></script>
+<script src="/app/admin/admin/js/common.js"></script>
+<script>
+
+
+    // 相关常量
+    const PRIMARY_KEY = "id";
+    const SELECT_API = "/app/admin/user/select";
+    const UPDATE_API = "/app/admin/user/update";
+    const DELETE_API = "/app/admin/user/delete";
+    const INSERT_URL = "/app/admin/user/insert";
+    const UPDATE_URL = "/app/admin/user/update";
+
+    layui.use(["laydate"], function () {
+        layui.laydate.render({
+            elem: "#user_disburse_at",
+            range: ["#user_disburse_at-date-start", "#user_disburse_at-date-end"],
+            type: "datetime",
+        });
+    })
+
+    layui.use(['table', 'form', 'common', 'jquery'], function () {
+        var treeTable = layui.treeTable;
+        // 渲染
+        var inst = treeTable.render({
+            elem: '#ID-treeTable-demo',
+            id: 'ID-treeTable-demo',
+            url: SELECT_API , // 此处为静态模拟数据，实际使用时需换成真实接口
+            page: true,
+            where: {
+                'parent_id':0
+            },
+            tree: {
+                customName: {
+                    name: 'mobile',
+                    id:'id'
+                },
+                // 异步加载子节点
+                async: {
+                    enable: true,
+                    autoParam: ['parent_id=id'],
+                    parseData(r){
+                        r.data.map(d=>{
+                            d.isParent = !!d?.children.length
+                        })
+                    }
+                },
+                data:{
+                    rootPid:0
+                },
+                view:{
+                    showIcon:true,
+                    expandAllDefault:false
+                },
+                callback:{
+                    onExpand:function(tableId, trData, expandFlag){
+                        console.log(trData);
+                    }
+                }
+            },
+            cols: [
+                [{
+                    title: "主键", align: "center", field: "id",
+                },{
+                    title: "手机", align: "center",
+                    width: 300,
+                    field: "mobile",
+                },{
+                    title: "昵称", align: "left",
+                    field: "nickname",
+                }, {
+                    title: "头像", align: "center",
+                    field: "avatar",
+                    templet: function (d) {
+                        return '<img src="' + encodeURI(d['avatar']) + '" style="max-width:32px;max-height:32px;" alt="" />'
+                    }
+                },
+                ]],
+        });
+    });
+</script>
+
+
+</body>
+</html>

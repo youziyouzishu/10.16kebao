@@ -28,6 +28,22 @@ class PieceController extends Base
     {
         $goods_id = $request->post('goods_id');
         $row = ShopGoods::find($goods_id);
+        if (!$row) {
+            return $this->fail('商品不存在');
+        }
+        if ($row->coupon_zone == 1) {
+            $pay_amount = 1;
+        } elseif ($row->coupon_zone == 2) {
+            $pay_amount = 10;
+        } elseif ($row->coupon_zone == 3) {
+            $pay_amount = 100;
+        } elseif ($row->coupon_zone == 4) {
+            $pay_amount = 1000;
+        } else {
+            return $this->fail('参数错误');
+        }
+        $row->setAttribute('price',$pay_amount);
+
         return $this->success('成功', $row);
     }
 
@@ -40,6 +56,9 @@ class PieceController extends Base
         if ($goods->num < $num) {
             return $this->fail('商品已售罄');
         }
+        if (!$goods) {
+            return $this->fail('商品不存在');
+        }
         if ($goods->coupon_zone == 1) {
             $pay_amount = 1;
         } elseif ($goods->coupon_zone == 2) {
@@ -51,9 +70,10 @@ class PieceController extends Base
         } else {
             return $this->fail('参数错误');
         }
+
         $pay_amount = $pay_amount * $num;
         $user = User::getUserById($request->user_id);
-        if ($user->money < $pay_amount) {
+        if ($user->offset < $pay_amount) {
             return $this->fail('抵扣券不足');
         }
         User::score(-$pay_amount, $user->id, '拼夺商品', 'offset');
@@ -74,7 +94,7 @@ class PieceController extends Base
             //人数凑够 开始进行发奖
             $goods->status = 0;
             $goods->save();
-            PieceLog::where('goods_id', $goods_id)->get()->each(function ($item) use (&$totalTickets, &$ticketMap) {
+            PieceLog::where(['goods_id'=> $goods_id,'status'=>0])->get()->each(function ($item) use (&$totalTickets, &$ticketMap) {
                 $item->status = 1;
                 $item->save();
                 for ($i = 0; $i < $item->num; $i++) {

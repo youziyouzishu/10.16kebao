@@ -21,7 +21,7 @@ class OrderController extends Base
     function orderList(Request $request)
     {
         $status = $request->post('status'); #状态 0=全部,1=待付款,2=待发货,3=待收货,4=已完成,5=售后
-        $rows = ShopGoodsOrders::with(['sku.goods'])->where('user_id', $request->user_id)
+        $rows = ShopGoodsOrders::with(['goods'])->where('user_id', $request->user_id)
             ->when(!empty($status), function (Builder $query) use ($status) {
                 if ($status == 1) {
                     $query->where('status', 0);
@@ -42,11 +42,21 @@ class OrderController extends Base
             ->orderByDesc('id')
             ->paginate()
             ->getCollection()
-            ->each(function ($item) {
+            ->each(function (ShopGoodsOrders $item) {
                 if ($item->status == 0){
                     $expire_time = $item->created_at->addMinutes(15)->timestamp - Carbon::now()->timestamp;
                     $item->setAttribute('expire_time', $expire_time);
                 }
+                if ($item->goods->type == 0){
+                    $image = $item->sku->goods->image;
+                    $sku_name = $item->sku->name;
+                }else{
+                    $image = $item->goods->image;
+                    $sku_name = null;
+                }
+                $item->setAttribute('image',$image);
+                $item->setAttribute('sku_name',$sku_name);
+                $item->setAttribute('goods_name',$item->goods->name);
             });
         return $this->success('请求成功', $rows);
     }
@@ -55,9 +65,21 @@ class OrderController extends Base
     {
         $order_id = $request->post('order_id');
         $order = ShopGoodsOrders::getOrderById($order_id);
-        $order->load(['address', 'shop', 'sku' => function ($query) {
-            $query->with(['goods']);
-        }, 'after']);
+        $order->load(['address','goods', 'shop', 'after']);
+        if ($order->status == 0){
+            $expire_time = $order->created_at->addMinutes(15)->timestamp - Carbon::now()->timestamp;
+            $order->setAttribute('expire_time', $expire_time);
+        }
+        if ($order->goods->type == 0){
+            $image = $order->sku->goods->image;
+            $sku_name = $order->sku->name;
+        }else{
+            $image = $order->goods->image;
+            $sku_name = null;
+        }
+        $order->setAttribute('image',$image);
+        $order->setAttribute('sku_name',$sku_name);
+        $order->setAttribute('goods_name',$order->goods->name);
         return $this->success('请求成功', $order);
     }
 

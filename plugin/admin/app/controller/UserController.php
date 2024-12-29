@@ -43,6 +43,16 @@ class UserController extends Crud
     /**
      * 浏览
      * @return Response
+     */
+    public function tree(): Response
+    {
+        return view('user/tree');
+    }
+
+
+    /**
+     * 浏览
+     * @return Response
      * @throws Throwable
      */
     public function index(): Response

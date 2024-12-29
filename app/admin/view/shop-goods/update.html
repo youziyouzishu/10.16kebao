@@ -29,20 +29,7 @@
                             </button>
                         </div>
                     </div>
-                    
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">视频</label>
-                        <div class="layui-input-block">
-                            <span></span>
-                            <input type="text" style="display:none" name="video" value="" />
-                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="video">
-                                <i class="layui-icon layui-icon-upload"></i>上传文件
-                            </button>
-                            <button type="button" class="pear-btn pear-btn-primary pear-btn-sm" id="attachment-choose-video">
-                                <i class="layui-icon layui-icon-align-left"></i>选择文件
-                            </button>
-                        </div>
-                    </div>
+
 
                     <div class="layui-form-item">
                         <label class="layui-form-label">图片</label>
@@ -249,7 +236,7 @@
                                     }
                                 },
                             })
-                            type.setValue(data,false,true);
+                            type.setValue(initValue,false,true);
                         });
 
 

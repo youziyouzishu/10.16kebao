@@ -18,25 +18,17 @@ class Order implements Consumer
     // 消费
     public function consume($data)
     {
+        dump($data);
         switch ($data['event']){
             case 'order_expire':
+                dump(1111);
                 // 订单过期
                 $order = ShopGoodsOrders::getOrderById($data['order_id']);
                 if ($order->status == 0){
+                    dump(2222);
                     //如果还没支付
                     $order->status = 3;
                     $order->save();
-                    //返还积分和优惠额度
-                    User::score($order->deduction_green_score,$order->user_id,'订单未支付返还抵扣绿色积分','green_score',false);
-                    User::score($order->deduction_confirm_score,$order->user_id,'订单未支付返还抵扣确权积分','confirm_score',false);
-                    User::score($order->deduction_develop_score,$order->user_id,'订单未支付返还抵扣拓展积分','develop_score',false);
-                    User::score($order->deduction_coupon_score,$order->user_id,'订单未支付返还抵扣优惠券余额','coupon_score',false);
-
-                    $row = UsersDrawLog::where('ordersn',$order->ordersn)->first();
-                    if ($row){
-                        $row->status = 1;
-                        $row->save();
-                    }
                 }
                 break;
             case 'order_accept':

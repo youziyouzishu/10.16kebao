@@ -33,7 +33,7 @@ class GoodsController extends Base
         $keyword = $request->post('keyword');
         $field = $request->post('field', 'id');
         $order = $request->post('order', 'desc');
-        $rows = ShopGoods::where(['status' => 1])
+        $rows = ShopGoods::where(['status' => 1,'type'=>0])
             ->with(['shop'])
             ->when(!empty($shop_id), function (Builder $query) use ($shop_id) {
                 $query->where('shop_id', $shop_id);
@@ -198,7 +198,6 @@ class GoodsController extends Base
 
     function pay(Request $request)
     {
-        dump($request->post());
         $use_coupon_score = $request->post('use_coupon_score'); #是否使用 优惠券额度 0否  1是
         $address_id = $request->post('address_id');
         $mark = $request->post('mark', '');
@@ -248,7 +247,7 @@ class GoodsController extends Base
                 $queue = 'order';
                 // 数据，可以直接传数组，无需序列化
                 $data = ['order_id' => $order->id, 'event' => 'order_expire'];
-                Client::send($queue, $data, 60 * 15);
+                Client::send($queue, $data, 60*15);
             }
 
             if ($car = ShopCar::where(['sku_id' => $item['id'], 'user_id' => $request->user_id])->first()) {
