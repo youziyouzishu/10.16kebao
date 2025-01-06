@@ -61,10 +61,12 @@ class UsersWithdrawController extends Crud
 
         if (!$shop) {
             $money = User::sum('money');
+            $consumer_amount = User::sum('consumer_amount');
         }else{
             $money = $shop->user->money;
+            $consumer_amount = $shop->user->consumer_amount;
         }
-        return view('users-withdraw/index',['money'=>$money]);
+        return view('users-withdraw/index',['money'=>$money,'consumer_amount'=>$consumer_amount]);
     }
 
     /**
@@ -108,7 +110,12 @@ class UsersWithdrawController extends Crud
             }
             if ($row->status == 0 && $param['status'] == 2) {
                 //驳回 返回余额
-                User::score($row->withdraw_amount, $row->user_id, '商家提现驳回', 'money');
+                if ($row->type == 0){
+                    User::score($row->withdraw_amount, $row->user_id, '商家提现驳回', 'money');
+                }else{
+                    User::score($row->withdraw_amount, $row->user_id, '消费商提现', 'consumer_amount');
+                }
+
             }
             return parent::update($request);
         }

@@ -62,6 +62,7 @@ use support\exception\BusinessException;
  * @property string $return_city 退货市
  * @property string $return_region 退货区
  * @property string $return_address 退货地址
+ * @property-read \app\admin\model\ShopClass|null $class
  * @mixin \Eloquent
  */
 class Shop extends Base

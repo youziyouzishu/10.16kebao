@@ -212,7 +212,7 @@ class GoodsController extends Base
                 } else {
                     $deduction_coupon_score = $sku->price * $item['num'] + $sku->goods->freight;
                 }
-                User::score(-$deduction_coupon_score, $user->id, '抵扣优惠券额度', 'coupon_score', false);
+                User::score(-$deduction_coupon_score, $user->id, '抵扣优惠券额度', 'coupon_score');
             }
             $ordersn = Util::generateOrdersn();
             $ordersData = [
@@ -220,7 +220,7 @@ class GoodsController extends Base
                 'ordersn' => $ordersn,
                 'user_id' => $request->user_id,
                 'shop_id' => $sku->goods->shop_id,
-                'pay_amount' => $sku->price * $item['num'] + $sku->goods->freight,
+                'pay_amount' => $sku->price * $item['num'] + $sku->goods->freight - $deduction_coupon_score,
                 'sku_id' => $sku->id,
                 'goods_id' => $sku->goods_id,
                 'num' => $item['num'],
@@ -230,6 +230,7 @@ class GoodsController extends Base
                 'mark' => $mark,
                 'tag' => $item['tag'],
                 'deduction_coupon_score' => $deduction_coupon_score,
+                'should_pay_amount'=> $sku->price * $item['num'] + $sku->goods->freight
             ];
             $order = ShopGoodsOrders::create($ordersData);
 

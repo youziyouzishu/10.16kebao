@@ -67,6 +67,8 @@ use support\exception\BusinessException;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTrashed()
+ * @property-read Consumer|null $consumer
+ * @property string $consumer_amount 消费商余额
  * @mixin \Eloquent
  */
 class User extends Base

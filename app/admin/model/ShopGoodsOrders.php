@@ -59,6 +59,11 @@ use support\exception\BusinessException;
  * @method static Builder<static>|ShopGoodsOrders withTrashed()
  * @method static Builder<static>|ShopGoodsOrders withoutTrashed()
  * @property int $admin_id 所属后台
+ * @property string $shop_get_green_score 商家获得绿色积分
+ * @property string $await_green_score 待释放绿色积分
+ * @property string|null $last_release_at 上一次释放时间
+ * @property string $should_pay_amount 应付金额
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \app\admin\model\ShopGoodsOrdersDividends> $dividends
  * @mixin \Eloquent
  */
 class ShopGoodsOrders extends Base
@@ -107,6 +112,15 @@ class ShopGoodsOrders extends Base
         'shop_get_money',
         'platform_get_money',
         'after_before_status',
+        'shop_get_green_score',
+        'deliver_time',
+        'deliver_express_name',
+        'deliver_waybill',
+        'coupon_amount',
+        'get_shop_score',
+        'should_pay_amount',
+        'await_green_score',
+        'last_release_at',
     ];
 
     protected $appends = ['status_text'];
@@ -175,6 +189,11 @@ class ShopGoodsOrders extends Base
     function sku()
     {
         return $this->belongsTo(ShopGoodsSku::class,'sku_id','id');
+    }
+
+    function dividends()
+    {
+        return $this->hasMany(ShopGoodsOrdersDividends::class,'order_id','id');
     }
 
 

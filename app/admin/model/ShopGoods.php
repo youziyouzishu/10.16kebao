@@ -47,6 +47,7 @@ use support\exception\BusinessException;
  * @property int $num 拼夺剩余数量
  * @property string $get_coupon_score 得到消费券额度
  * @property int $weigh 权重
+ * @property-read \app\admin\model\GoodsClass|null $class
  * @mixin \Eloquent
  */
 class ShopGoods extends Base

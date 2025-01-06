@@ -21,6 +21,7 @@ use plugin\admin\app\model\Base;
  * @property int $address_id 收货地址
  * @property-read \app\admin\model\ShopGoods|null $goods
  * @property int $num 数量
+ * @property string $pay_amount 支付抵扣券
  * @mixin \Eloquent
  */
 class PieceLog extends Base
@@ -40,7 +41,7 @@ class PieceLog extends Base
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'user_id', 'goods_id', 'status', 'winer', 'address_id','num'
+        'user_id', 'goods_id', 'status', 'winer', 'address_id','num','pay_amount'
     ];
 
     function goods()

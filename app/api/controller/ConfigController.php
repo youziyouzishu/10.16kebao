@@ -4,14 +4,8 @@ namespace app\api\controller;
 
 use app\admin\model\Banner;
 use app\admin\model\Notice;
-use app\admin\model\ShopGoodsSku;
 use app\api\basic\Base;
-use app\api\common\library\Pay;
-use Carbon\Carbon;
-use DateTime;
 use plugin\admin\app\model\Option;
-use support\exception\BusinessException;
-use support\Log;
 use support\Request;
 use Tencent\TLSSigAPIv2;
 

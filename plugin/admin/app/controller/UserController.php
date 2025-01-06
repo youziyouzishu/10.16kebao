@@ -16,7 +16,6 @@ use Throwable;
 class UserController extends Crud
 {
 
-    protected $noNeedAuth = ['select'];
 
     /**
      * @var User
@@ -35,18 +34,18 @@ class UserController extends Crud
     public function select(Request $request): Response
     {
         [$where, $format, $limit, $field, $order] = $this->selectInput($request);
-        $query = $this->doSelect($where, $field, $order);
+        $query = $this->doSelect($where, $field, $order)->with(['children']);
         return $this->doFormat($query, $format, $limit);
     }
 
 
     /**
-     * 浏览
+     * 树形表格
      * @return Response
      */
     public function tree(): Response
     {
-        return view('user/tree');
+        return raw_view('user/tree');
     }
 
 

@@ -84,6 +84,7 @@ class ShopGoodsOrdersController extends Crud
             $param = $request->post();
             $row = $this->model->find($param['id']);
             if ($row->status == 1 && $param['status'] == 2) {
+                #发货
                 #3天自动确认收货
                 // 队列名
                 $queue = 'order';

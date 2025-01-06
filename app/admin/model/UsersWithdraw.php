@@ -19,6 +19,7 @@ use plugin\admin\app\model\Base;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersWithdraw query()
+ * @property int $type 类型:0=商家提现,1=消费商提现
  * @mixin \Eloquent
  */
 class UsersWithdraw extends Base

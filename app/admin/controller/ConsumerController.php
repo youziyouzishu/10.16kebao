@@ -2,6 +2,9 @@
 
 namespace app\admin\controller;
 
+use plugin\admin\app\common\Util;
+use plugin\admin\app\model\Admin;
+use plugin\admin\app\model\AdminRole;
 use support\Request;
 use support\Response;
 use app\admin\model\Consumer;
@@ -73,6 +76,24 @@ class ConsumerController extends Crud
     public function update(Request $request): Response
     {
         if ($request->method() === 'POST') {
+            $param = $request->post();
+
+            $row = $this->model->find($param['id']);
+            if ($row->status == 0 && $param['status'] == 1) {
+                //审核通过 增加管理员
+                $admin = new Admin;
+                $admin->username = $row->user->username;
+                $admin->nickname = $row->user->nickname;
+                $admin->password = Util::passwordHash('123456');
+                $admin->avatar = $row->user->avatar;
+                $admin->mobile = $row->user->mobile;
+                $admin->save();
+                $admin_roles = new AdminRole;
+                $admin_roles->role_id = 4;
+                $admin_roles->admin_id = $admin->id;
+                $admin_roles->save();
+                $request->setParams('post', ['admin_id' => $admin->id]);
+            }
             return parent::update($request);
         }
         return view('consumer/update');

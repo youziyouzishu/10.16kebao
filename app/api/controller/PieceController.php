@@ -83,6 +83,7 @@ class PieceController extends Base
             'user_id' => $request->user_id,
             'goods_id' => $goods_id,
             'address_id' => $address_id,
+            'pay_amount' =>$pay_amount,
             'num' => $num
         ]);
         $goods->decrement('num', $num);

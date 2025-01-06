@@ -156,7 +156,6 @@ class ShopController extends Base
             ->when(!empty($class_id), function ($query) use ($class_id) {
                 $query->where(['class_id' => $class_id]);
             })
-
             ->when(!empty($field),function (Builder $query)use($order,$lat,$lng){
                 if ($order == 1){
                     $query->orderByDesc('id');
@@ -170,6 +169,10 @@ class ShopController extends Base
             })
             ->paginate()
             ->items();
+        // 格式化 distance 字段，保留两位小数
+        foreach ($rows as $row) {
+            $row->distance = round($row->distance, 2);
+        }
         return $this->success('请求成功', $rows);
     }
 

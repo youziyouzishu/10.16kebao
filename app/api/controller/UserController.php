@@ -50,6 +50,7 @@ class UserController extends Base
         }
 
         if (!$user) {
+            dump('注册');
             $user = User::create([
                 'avatar' => '/avatar.png',
                 'nickname' => '用户' . Util::alnum(),
@@ -83,8 +84,8 @@ class UserController extends Base
                     }
                 }
             }
-
         }
+        dump('登录');
         $user->last_time = date('Y-m-d H:i:s');
         $user->last_ip = $request->getRealIp();
         $user->save();

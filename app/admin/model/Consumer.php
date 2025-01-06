@@ -20,6 +20,9 @@ use plugin\admin\app\model\User;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Consumer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Consumer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Consumer query()
+ * @property int $admin_id 后台ID
+ * @property int $level 消费商等级
+ * @property int $type 类型:0=无,1=一级消费商,2=二级消费商
  * @mixin \Eloquent
  */
 class Consumer extends Base

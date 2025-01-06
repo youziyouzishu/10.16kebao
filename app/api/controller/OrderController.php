@@ -7,6 +7,7 @@ use app\admin\model\Shop;
 use app\admin\model\ShopGoodsOrders;
 use app\admin\model\ShopGoodsOrdersAfter;
 use app\admin\model\ShopGoodsOrdersAssess;
+use app\admin\model\UsersLayer;
 use app\api\basic\Base;
 use app\api\common\library\Pay;
 use Carbon\Carbon;
@@ -43,20 +44,20 @@ class OrderController extends Base
             ->paginate()
             ->getCollection()
             ->each(function (ShopGoodsOrders $item) {
-                if ($item->status == 0){
+                if ($item->status == 0) {
                     $expire_time = $item->created_at->addMinutes(15)->timestamp - Carbon::now()->timestamp;
                     $item->setAttribute('expire_time', $expire_time);
                 }
-                if ($item->goods->type == 0){
+                if ($item->goods->type == 0) {
                     $image = $item->sku->goods->image;
                     $sku_name = $item->sku->name;
-                }else{
+                } else {
                     $image = $item->goods->image;
                     $sku_name = null;
                 }
-                $item->setAttribute('image',$image);
-                $item->setAttribute('sku_name',$sku_name);
-                $item->setAttribute('goods_name',$item->goods->name);
+                $item->setAttribute('image', $image);
+                $item->setAttribute('sku_name', $sku_name);
+                $item->setAttribute('goods_name', $item->goods->name);
             });
         return $this->success('请求成功', $rows);
     }
@@ -65,21 +66,21 @@ class OrderController extends Base
     {
         $order_id = $request->post('order_id');
         $order = ShopGoodsOrders::getOrderById($order_id);
-        $order->load(['address','goods', 'shop', 'after']);
-        if ($order->status == 0){
+        $order->load(['address', 'goods', 'shop', 'after']);
+        if ($order->status == 0) {
             $expire_time = $order->created_at->addMinutes(15)->timestamp - Carbon::now()->timestamp;
             $order->setAttribute('expire_time', $expire_time);
         }
-        if ($order->goods->type == 0){
+        if ($order->goods->type == 0) {
             $image = $order->sku->goods->image;
             $sku_name = $order->sku->name;
-        }else{
+        } else {
             $image = $order->goods->image;
             $sku_name = null;
         }
-        $order->setAttribute('image',$image);
-        $order->setAttribute('sku_name',$sku_name);
-        $order->setAttribute('goods_name',$order->goods->name);
+        $order->setAttribute('image', $image);
+        $order->setAttribute('sku_name', $sku_name);
+        $order->setAttribute('goods_name', $order->goods->name);
         return $this->success('请求成功', $order);
     }
 
@@ -88,12 +89,12 @@ class OrderController extends Base
         $ordersn = $request->post('ordersn');
         $pay_type = $request->post('pay_type');
         $user = User::getUserById($request->user_id);
-        $order = ShopGoodsOrders::where(['ordersn' => $ordersn, 'user_id' => $request->user_id, 'status' => 0])->where('pay_amount','<>',0)->first();
+        $order = ShopGoodsOrders::where(['ordersn' => $ordersn, 'user_id' => $request->user_id, 'status' => 0])->where('pay_amount', '<>', 0)->first();
         if (!$order) {
             return $this->fail('订单不存在');
         }
 
-        $ret = Pay::pay($pay_type, $order->pay_amount, $order->ordersn, '购买商品','goods',$user->openid);
+        $ret = Pay::pay($pay_type, $order->pay_amount, $order->ordersn, '购买商品', 'goods', $user->openid);
         return $this->success('成功', $ret);
     }
 
@@ -122,7 +123,6 @@ class OrderController extends Base
     }
 
 
-
     #确认收货
     function accept(Request $request)
     {
@@ -134,19 +134,53 @@ class OrderController extends Base
         $order->status = 11;
 
         $get_green_score = round($order->goods_amount * 0.2, 2);
-        if ($get_green_score != 0) {
-            //返还绿色积分
-            $order->get_green_score = $get_green_score;
-            $order->save();
-            User::score($get_green_score, $order->user_id, '购买商品获得绿色积分', 'green_score');
-        }
-
-        $platform_get_money = round($order->goods_amount * $order->shop->rate / 100,2);
-        $shop_get_money = $order->pay_amount - $platform_get_money;
-        User::score($shop_get_money, $order->shop->user_id, '成交订单获得金额', 'money');
-        $order->platform_get_money = $platform_get_money;
-        $order->shop_get_money = $shop_get_money;
+        $order->get_green_score = $get_green_score;
+        $order->await_green_score = $get_green_score;
         $order->save();
+        //消费者获得20%绿色积分
+        User::score($get_green_score, $order->user_id, '购买商品获得绿色积分', 'green_score');
+        //商家获得20%绿色积分
+        User::score($get_green_score, $order->shop->user_id, '成交订单获得绿色积分', 'green_score');
+
+        $platform_get_money = round($order->goods_amount * $order->shop->rate / 100, 2);
+        $shop_get_money = $order->pay_amount - $platform_get_money;
+        User::score($shop_get_money, $order->shop->user_id, '成交订单获得结算金额', 'money');
+
+        User::score($order->deduction_coupon_score * 0.8, $order->shop->user_id, '成交订单获得抵扣消费券结算', 'money');
+
+        $order->platform_get_money = $platform_get_money;//让利金额
+        $order->shop_get_money = $shop_get_money;
+        $order->shop_get_green_score = $get_green_score;
+        $order->save();
+
+
+        //向上给消费商分红消费券
+        $get_coupon_score = round($platform_get_money * 0.02, 2);
+        $layer = UsersLayer::where(['user_id' => $order->user_id])
+            ->whereIn('layer', [1, 3, 5, 7, 9, 11, 13, 15, 17, 19])
+            ->whereHas('user', function (Builder $query) {
+                $query->whereHas('consumer');
+            })
+            ->get();
+        $layer->each(function (UsersLayer $item) use ($get_coupon_score) {
+            if ($item->parent->green_score >= $get_coupon_score) {
+                //如果是消费商 并且消费商的绿色积分足够开始释放
+                User::score(-$get_coupon_score, $item->parent_id, '订单确认释放绿色积分', 'green_score');
+                User::score($get_coupon_score, $item->parent_id, '订单确认产生消费券', 'coupon_score');
+            }
+        });
+        //消费商收益
+        if (!$order->user->consumer&&$order->user->parent->consumer){
+            //自己不是消费商   上级是消费商
+            if ($order->user->parent->consumer->type ==1) {
+                //一级消费商拿到5%的让利收益
+                $consumer_amount = round($platform_get_money * 0.05, 2);
+            }else{
+                //一级消费商拿到10%的让利收益
+                $consumer_amount = round($platform_get_money * 0.1, 2);
+            }
+            User::score($consumer_amount, $order->user->parent_id, '订单确认产生消费商金额', 'consumer_amount');
+        }
         return $this->success();
     }
 
@@ -253,7 +287,7 @@ class OrderController extends Base
         if (!in_array($order->status, [4, 5])) {
             return $this->fail('订单状态错误');
         }
-        $order->status =  $order->after_before_status;
+        $order->status = $order->after_before_status;
         $order->after->status = 3;
         $order->after->save();
         $order->save();
@@ -292,12 +326,12 @@ class OrderController extends Base
         $order = ShopGoodsOrders::getOrderById($order_id);
         $shop = $order->shop;
         return $this->success('请求成功', [
-            'return_name'=>$shop->return_name,
-            'return_mobile'=>$shop->return_mobile,
-            'return_address'=>$shop->return_address,
-            'return_province'=>$shop->return_province,
-            'return_city'=>$shop->return_city,
-            'return_region'=>$shop->return_region,
+            'return_name' => $shop->return_name,
+            'return_mobile' => $shop->return_mobile,
+            'return_address' => $shop->return_address,
+            'return_province' => $shop->return_province,
+            'return_city' => $shop->return_city,
+            'return_region' => $shop->return_region,
         ]);
     }
 

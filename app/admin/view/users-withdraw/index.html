@@ -67,7 +67,7 @@
         <!-- 表格顶部工具栏 -->
         <script type="text/html" id="table-toolbar">
             <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add" permission="admin.userswithdraw.insert">
-                <i class="layui-icon layui-icon-add-1"></i>新增
+                <i class="layui-icon layui-icon-add-1"></i>提现
             </button>
             <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove" permission="admin.userswithdraw.delete">
                 <i class="layui-icon layui-icon-delete"></i>删除
@@ -75,6 +75,9 @@
 
             <button class="pear-btn pear-btn-primary pear-btn-md">
                 商家余额：{$money}
+            </button>
+            <button class="pear-btn pear-btn-primary pear-btn-md">
+                消费商余额：{$consumer_amount}
             </button>
         </script>
 
@@ -175,6 +178,18 @@
 							return util.escape(items.join(","));
 						}
 					},{
+                        title: "类型",align: "center",
+                        field: "type",
+                        templet: function (d) {
+                            let field = "type";
+                            if (typeof d[field] == "undefined") return "";
+                            let items = [];
+                            layui.each((d[field] + "").split(","), function (k , v) {
+                                items.push(apiResults[field][v] || v);
+                            });
+                            return util.escape(items.join(","));
+                        }
+                    },{
 						title: "驳回原因",align: "center",
 						field: "reason",
 					},{
@@ -220,6 +235,7 @@
 				let apis = [];
 				let apiResults = {};
 				apiResults["status"] = ["待审核","已打款","驳回"];
+				apiResults["type"] = ["商家提现","消费商提现"];
 				let count = apis.length;
 				layui.each(apis, function (k, item) {
 				    let [field, url] = item;

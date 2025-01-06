@@ -23,6 +23,13 @@
                         </div>
                     </div>
 
+                    <div class="layui-form-item type">
+                        <label class="layui-form-label required">等级</label>
+                        <div class="layui-input-block">
+                            <div name="type" id="type" value="" ></div>
+                        </div>
+                    </div>
+
                     <div class="layui-form-item reason">
                         <label class="layui-form-label">驳回原因</label>
                         <div class="layui-input-block">
@@ -82,6 +89,22 @@
                             }
                         });
 
+                        // 字段 匿名:0=否,1=是 anonymity
+                        layui.use(["jquery", "xmSelect"], function() {
+                            let value = layui.$("#type").attr("value");
+                            let initValue = value ? value.split(",") : [];
+                            layui.xmSelect.render({
+                                el: "#type",
+                                name: "type",
+                                filterable: true,
+                                initValue: initValue,
+                                data: [{"value":"1","name":"一级消费商,"},{"value":"2","name":"二级消费商"}],
+                                model: {"icon":"hidden","label":{"type":"text"}},
+                                clickClose: true,
+                                radio: true,
+                            })
+                        });
+
                         // 字段 状态:0=待审核,1=通过,2=驳回,3=撤销申请 status
                         layui.use(["jquery", "xmSelect"], function() {
                             let value = layui.$("#status").attr("value");
@@ -115,6 +138,11 @@
                                     if (arr.length > 0) {
                                         // 从选中数据中提取value值
                                         var value = arr[0].value;
+                                        if (value === "1"){
+                                            $(".type").removeClass("layui-hide")
+                                        }else{
+                                            $(".type").addClass("layui-hide")
+                                        }
                                         if (value === "2"){
                                             $(".reason").removeClass("layui-hide")
                                         }else{

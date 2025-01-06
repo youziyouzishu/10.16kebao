@@ -37,6 +37,13 @@
                         </div>
                     </div>
 
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">提现类型</label>
+                        <div class="layui-input-block">
+                            <div name="type" id="type" ></div>
+                        </div>
+                    </div>
+
                     
                 </div>
             </div>
@@ -66,22 +73,23 @@
             const INSERT_API = "/admin/users-withdraw/insert";
 
             
-            // 字段 状态:0=待审核,1=已打款,2=驳回 status
+            // 字段 类型:0=商家提现,1=消费商提现 type
             layui.use(["jquery", "xmSelect"], function() {
-                let value = layui.$("#status").attr("value");
+                let value = layui.$("#type").attr("value");
                 let initValue = value ? value.split(",") : [];
                 layui.xmSelect.render({
-                    el: "#status",
-                    name: "status",
+                    el: "#type",
+                    name: "type",
                     filterable: true,
                     initValue: initValue,
-                    data: [{"value":"0","name":"待审核"},{"value":"1","name":"已打款"},{"value":"2","name":"驳回"}],
+                    data: [{"value":"0","name":"商家提现"},{"value":"1","name":"消费商提现"}],
                     model: {"icon":"hidden","label":{"type":"text"}},
                     clickClose: true,
                     radio: true,
                     layVerify: "required",
                 })
             });
+
             
             //提交事件
             layui.use(["form", "popup"], function () {

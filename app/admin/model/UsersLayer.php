@@ -4,6 +4,7 @@ namespace app\admin\model;
 
 
 use plugin\admin\app\model\Base;
+use plugin\admin\app\model\User;
 
 /**
  * 
@@ -17,6 +18,8 @@ use plugin\admin\app\model\Base;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersLayer newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersLayer newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|UsersLayer query()
+ * @property-read User|null $parent
+ * @property-read User|null $user
  * @mixin \Eloquent
  */
 class UsersLayer extends Base
@@ -38,6 +41,16 @@ class UsersLayer extends Base
     protected $fillable = [
         'user_id', 'parent_id', 'layer'
     ];
+
+    function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    function parent()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
 
 
