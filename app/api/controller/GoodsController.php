@@ -242,7 +242,6 @@ class GoodsController extends Base
                 if ($res->code == 1) {
                     return $this->fail($res->msg);
                 }
-                return $this->success('请求成功');
             } else {
                 // 队列名
                 $queue = 'order';

@@ -95,7 +95,7 @@ class ShopGoodsSkuController extends Crud
     {
         if ($request->method() === 'POST') {
             $param = $request->post();
-            $goods = ShopGoods::find($param('goods_id'));
+            $goods = ShopGoods::find($param['goods_id']);
             if (!$goods){
                 return $this->fail('商品不存在');
             }

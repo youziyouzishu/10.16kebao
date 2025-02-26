@@ -25,7 +25,6 @@ class Pay
      */
     public static function pay($pay_type,$pay_amount, $order_no, $mark, $attach, string $openid = '')
     {
-        dump($openid);
         $config = config('payment');
         \Yansongda\Pay\Pay::config($config);
         try {

@@ -16,12 +16,4 @@ use Webman\Route;
 
 
 
-Route::fallback(function () {
-    if (request()->expectsJson()){
-        throw new \Tinywan\ExceptionHandler\Exception\RouteNotFoundException();
-    }else{
-        return not_found();
-    }
-
-});
 

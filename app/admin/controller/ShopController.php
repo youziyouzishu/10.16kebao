@@ -89,7 +89,7 @@ class ShopController extends Crud
             if ($row->status == 2 && $param['status'] == 3) {
                 //审核通过 增加管理员
                 $admin = new Admin;
-                $admin->username = $row->user->username;
+                $admin->username = 'shop'.$row->user->username;
                 $admin->nickname = $row->user->nickname;
                 $admin->password = Util::passwordHash('123456');
                 $admin->avatar = $row->user->avatar;

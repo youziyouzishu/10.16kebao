@@ -105,7 +105,7 @@
                     name: "type",
                     filterable: true,
                     initValue: initValue,
-                    data: [{"value":"confirm_trade_score","name":"确权交易积分"},{"value":"await_confirm_score","name":"待确权积分"},{"value":"confirm_score","name":"确权积分"},{"value":"develop_score","name":"拓展积分"},{"value":"green_score","name":"绿色积分"},{"value":"contribution_score","name":"贡献值"},{"value":"shop_score","name":"门店积分"},{"value":"coupon_score","name":"优惠券额度"},{"value":"offset","name":"抵用券"},{"value":"money","name":"商家余额"}],
+                    data: [{"value":"green_score","name":"绿色积分"},{"value":"coupon_score","name":"消费券"},{"value":"offset","name":"抵用券"},{"value":"money","name":"商家余额"},{"value":"consumer_amount","name":"消费商余额"}],
                     model: {"icon":"hidden","label":{"type":"text"}},
                     clickClose: true,
                     radio: true,
@@ -210,7 +210,7 @@
 				// 获取表格中下拉或树形组件数据
 				let apis = [];
 				let apiResults = {};
-				apiResults["type"] = {"confirm_trade_score":"确权交易积分","await_confirm_score":"待确权积分","confirm_score":"确权积分","develop_score":"拓展积分","green_score":"绿色积分","contribution_score":"贡献值","shop_score":"门店积分","coupon_score":"优惠券额度","offset":"抵用券","money":"商家余额"};
+				apiResults["type"] = {"green_score":"绿色积分","coupon_score":"消费券","offset":"抵用券","money":"商家余额","consumer_amount":"消费商余额"};
 				let count = apis.length;
 				layui.each(apis, function (k, item) {
 				    let [field, url] = item;

@@ -82,7 +82,7 @@ class ConsumerController extends Crud
             if ($row->status == 0 && $param['status'] == 1) {
                 //审核通过 增加管理员
                 $admin = new Admin;
-                $admin->username = $row->user->username;
+                $admin->username = 'xf'.$row->user->username;
                 $admin->nickname = $row->user->nickname;
                 $admin->password = Util::passwordHash('123456');
                 $admin->avatar = $row->user->avatar;

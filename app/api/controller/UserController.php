@@ -16,6 +16,7 @@ use plugin\admin\app\common\Util;
 use plugin\admin\app\model\Dict;
 use plugin\admin\app\model\User;
 use Respect\Validation\Validator;
+use support\Cache;
 use support\Request;
 use support\Response;
 use Tinywan\Jwt\JwtToken;
@@ -172,6 +173,7 @@ class UserController extends Base
         $row->load(['agent', 'parent', 'shop','consumer']);
         return $this->success('获取成功', $row);
     }
+
 
     function bindMobile(Request $request)
     {
@@ -378,6 +380,21 @@ class UserController extends Base
         $user->delete();
         return $this->success('注销成功');
     }
+
+    function getMoneyQrCode(Request $request)
+    {
+        $app = new Application(config('wechat'));
+        $data = [
+            'scene' => $request->user_id,
+            'page' => 'pages/home',
+            'width' => 280,
+            'check_path' => !config('app.debug'),
+        ];
+        $response = $app->getClient()->postJson('/wxa/getwxacodeunlimit', $data);
+        $base64 = "data:image/png;base64,".base64_encode($response->getContent());
+        return $this->success('获取成功', ['base64' => $base64]);
+    }
+
 
 
 }

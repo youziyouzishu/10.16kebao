@@ -30,7 +30,6 @@ use support\exception\BusinessException;
  */
 class ShopGoodsOrdersDividends extends Base
 {
-    use SoftDeletes;
     /**
      * The table associated with the model.
      *

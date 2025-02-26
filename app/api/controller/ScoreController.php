@@ -67,4 +67,24 @@ class ScoreController extends Base
         return $this->success('成功');
     }
 
+    #转赠抵用券
+    function transfer(Request $request)
+    {
+        $offset = $request->post('offset');
+        $to_user_id = $request->post('to_user_id');
+        $user = User::find($request->user_id);
+        if ($user->id == $to_user_id){
+            return $this->fail('不能转给自己');
+        }
+        if (empty($user->agent)){
+            return $this->fail('请先成为券商');
+        }
+        if ($user->offset < $offset){
+            return $this->fail('抵用券不足');
+        }
+        User::score(-$offset, $request->user_id, '转赠抵用券', 'offset');
+        User::score($offset, $to_user_id, '收到抵用券', 'offset');
+        return $this->success('成功');
+    }
+
 }

@@ -143,7 +143,7 @@ class OrderController extends Base
         User::score($get_green_score, $order->shop->user_id, '成交订单获得绿色积分', 'green_score');
 
         $platform_get_money = round($order->goods_amount * $order->shop->rate / 100, 2);
-        $shop_get_money = $order->pay_amount - $platform_get_money;
+        $shop_get_money = $order->should_pay_amount  - $platform_get_money;
         User::score($shop_get_money, $order->shop->user_id, '成交订单获得结算金额', 'money');
 
         User::score($order->deduction_coupon_score * 0.8, $order->shop->user_id, '成交订单获得抵扣消费券结算', 'money');
@@ -170,7 +170,7 @@ class OrderController extends Base
             }
         });
         //消费商收益
-        if (!$order->user->consumer&&$order->user->parent->consumer){
+        if (!empty($order->user->consumer)&&$order->user->parent->consumer){
             //自己不是消费商   上级是消费商
             if ($order->user->parent->consumer->type ==1) {
                 //一级消费商拿到5%的让利收益
